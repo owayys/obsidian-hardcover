@@ -1,0 +1,35 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
+{
+  "colorize_brackets": true,
+  "indent_guides": {
+    "enabled": true
+  },
+  "languages": {
+    "JavaScript": {
+      "language_servers": ["tsgo", "!vtsls", "oxc", "biome"]
+    },
+    "TypeScript": {
+      "language_servers": ["tsgo", "vtsls", "oxc", "biome"],
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      },
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
+    },
+    "TSX": {
+      "language_servers": ["tsgo", "!vtsls", "oxc", "biome"]
+    },
+    "JSON": {
+      "language_servers": ["biome", "json-language-server"]
+    },
+    "JSONC": {
+      "language_servers": ["biome", "json-language-server"]
+    }
+  }
+}
