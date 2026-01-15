@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -13,16 +14,16 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  bigint: { input: any; output: any; }
-  citext: { input: any; output: any; }
-  date: { input: any; output: any; }
-  float8: { input: any; output: any; }
-  json: { input: any; output: any; }
-  jsonb: { input: any; output: any; }
-  numeric: { input: any; output: any; }
-  smallint: { input: any; output: any; }
-  timestamp: { input: any; output: any; }
-  timestamptz: { input: any; output: any; }
+  bigint: { input: number; output: number; }
+  citext: { input: string; output: string; }
+  date: { input: string; output: string; }
+  float8: { input: number; output: number; }
+  json: { input: Record<string, any>; output: Record<string, any>; }
+  jsonb: { input: Record<string, any>; output: Record<string, any>; }
+  numeric: { input: number; output: number; }
+  smallint: { input: number; output: number; }
+  timestamp: { input: string; output: string; }
+  timestamptz: { input: string; output: string; }
 };
 
 export type AuthorIdType = {
@@ -19416,6 +19417,26 @@ export type Users_Variance_Order_By = {
   status_id?: InputMaybe<Order_By>;
 };
 
+export type GetEditionPageCountQueryVariables = Exact<{
+  editionId: Scalars['Int']['input'];
+}>;
+
+
+export type GetEditionPageCountQuery = { __typename?: 'query_root', editions_by_pk?: { __typename?: 'editions', id: number, book: { __typename?: 'books', pages?: number | null } } | null };
+
+export type GetUserCurrentBooksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserCurrentBooksQuery = { __typename?: 'query_root', me: Array<{ __typename?: 'users', user_books: Array<{ __typename?: 'user_books', last_read_date?: string | null, first_started_reading_date?: string | null, book: { __typename?: 'books', id: number, title?: string | null, image?: { __typename?: 'images', url?: string | null } | null }, edition?: { __typename?: 'editions', id: number, image?: { __typename?: 'images', url?: string | null } | null } | null, user_book_reads: Array<{ __typename?: 'user_book_reads', id: number, progress_pages?: number | null, progress_seconds?: number | null, started_at?: string | null, progress?: number | null, user_book?: { __typename?: 'user_books', status_id: number } | null }> }> }> };
+
+export type UpdateUserBookReadMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  object: DatesReadInput;
+}>;
+
+
+export type UpdateUserBookReadMutation = { __typename?: 'mutation_root', update_user_book_read?: { __typename?: 'UserBookReadIdType', id?: number | null, user_book_read?: { __typename?: 'user_book_reads', id: number, progress_pages?: number | null, progress?: number | null } | null } | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -19434,3 +19455,59 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
+
+export const GetEditionPageCountDocument = new TypedDocumentString(`
+    query GetEditionPageCount($editionId: Int!) {
+  editions_by_pk(id: $editionId) {
+    id
+    book {
+      pages
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetEditionPageCountQuery, GetEditionPageCountQueryVariables>;
+export const GetUserCurrentBooksDocument = new TypedDocumentString(`
+    query GetUserCurrentBooks {
+  me {
+    user_books(where: {user_book_status: {id: {_eq: 2}}}) {
+      book {
+        image {
+          url
+        }
+        id
+        title
+      }
+      last_read_date
+      first_started_reading_date
+      edition {
+        id
+        image {
+          url
+        }
+      }
+      user_book_reads {
+        id
+        progress_pages
+        progress_seconds
+        started_at
+        progress
+        user_book {
+          status_id
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetUserCurrentBooksQuery, GetUserCurrentBooksQueryVariables>;
+export const UpdateUserBookReadDocument = new TypedDocumentString(`
+    mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {
+  update_user_book_read(id: $id, object: $object) {
+    id
+    user_book_read {
+      id
+      progress_pages
+      progress
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<UpdateUserBookReadMutation, UpdateUserBookReadMutationVariables>;

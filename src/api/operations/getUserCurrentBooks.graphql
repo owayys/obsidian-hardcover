@@ -1,0 +1,31 @@
+query GetUserCurrentBooks {
+  me {
+    user_books(where: {user_book_status: {id: {_eq: 2}}}) {
+      book {
+        image {
+          url
+        }
+        id
+        title
+      }
+      last_read_date
+      first_started_reading_date
+      edition {
+        id
+        image {
+          url
+        }
+      }
+      user_book_reads {
+        id
+        progress_pages
+        progress_seconds
+        started_at
+        progress
+        user_book {
+          status_id
+        }
+      }
+    }
+  }
+}
