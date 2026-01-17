@@ -1,7 +1,5 @@
 /* eslint-disable */
-import * as types from './graphql';
-
-
+import * as types from "./graphql"
 
 /**
  * Map of all GraphQL operations in the project.
@@ -15,30 +13,29 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "query GetEditionPageCount($editionId: Int!) {\n  editions_by_pk(id: $editionId) {\n    id\n    book {\n      pages\n    }\n  }\n}": typeof types.GetEditionPageCountDocument,
-    "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n      }\n      last_read_date\n      first_started_reading_date\n      edition {\n        id\n        image {\n          url\n        }\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress_seconds\n        started_at\n        progress\n        user_book {\n          status_id\n        }\n      }\n    }\n  }\n}": typeof types.GetUserCurrentBooksDocument,
-    "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    id\n    user_book_read {\n      id\n      progress_pages\n      progress\n    }\n  }\n}": typeof types.UpdateUserBookReadDocument,
-};
+  "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        default_physical_edition_id\n        pages\n      }\n      last_read_date\n      first_started_reading_date\n      edition {\n        id\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress_seconds\n        started_at\n        progress\n        user_book {\n          status_id\n          edition_id\n        }\n      }\n    }\n  }\n}": typeof types.GetUserCurrentBooksDocument
+  "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    id\n    user_book_read {\n      id\n      progress_pages\n      progress\n    }\n  }\n}": typeof types.UpdateUserBookReadDocument
+}
 const documents: Documents = {
-    "query GetEditionPageCount($editionId: Int!) {\n  editions_by_pk(id: $editionId) {\n    id\n    book {\n      pages\n    }\n  }\n}": types.GetEditionPageCountDocument,
-    "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n      }\n      last_read_date\n      first_started_reading_date\n      edition {\n        id\n        image {\n          url\n        }\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress_seconds\n        started_at\n        progress\n        user_book {\n          status_id\n        }\n      }\n    }\n  }\n}": types.GetUserCurrentBooksDocument,
-    "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    id\n    user_book_read {\n      id\n      progress_pages\n      progress\n    }\n  }\n}": types.UpdateUserBookReadDocument,
-};
+  "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        default_physical_edition_id\n        pages\n      }\n      last_read_date\n      first_started_reading_date\n      edition {\n        id\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress_seconds\n        started_at\n        progress\n        user_book {\n          status_id\n          edition_id\n        }\n      }\n    }\n  }\n}":
+    types.GetUserCurrentBooksDocument,
+  "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    id\n    user_book_read {\n      id\n      progress_pages\n      progress\n    }\n  }\n}":
+    types.UpdateUserBookReadDocument,
+}
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query GetEditionPageCount($editionId: Int!) {\n  editions_by_pk(id: $editionId) {\n    id\n    book {\n      pages\n    }\n  }\n}"): typeof import('./graphql').GetEditionPageCountDocument;
+export function graphql(
+  source: "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        default_physical_edition_id\n        pages\n      }\n      last_read_date\n      first_started_reading_date\n      edition {\n        id\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress_seconds\n        started_at\n        progress\n        user_book {\n          status_id\n          edition_id\n        }\n      }\n    }\n  }\n}",
+): typeof import("./graphql").GetUserCurrentBooksDocument
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n      }\n      last_read_date\n      first_started_reading_date\n      edition {\n        id\n        image {\n          url\n        }\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress_seconds\n        started_at\n        progress\n        user_book {\n          status_id\n        }\n      }\n    }\n  }\n}"): typeof import('./graphql').GetUserCurrentBooksDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    id\n    user_book_read {\n      id\n      progress_pages\n      progress\n    }\n  }\n}"): typeof import('./graphql').UpdateUserBookReadDocument;
-
+export function graphql(
+  source: "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    id\n    user_book_read {\n      id\n      progress_pages\n      progress\n    }\n  }\n}",
+): typeof import("./graphql").UpdateUserBookReadDocument
 
 export function graphql(source: string) {
-  return (documents as any)[source] ?? {};
+  return (documents as any)[source] ?? {}
 }

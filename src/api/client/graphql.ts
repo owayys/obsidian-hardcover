@@ -19417,17 +19417,10 @@ export type Users_Variance_Order_By = {
   status_id?: InputMaybe<Order_By>;
 };
 
-export type GetEditionPageCountQueryVariables = Exact<{
-  editionId: Scalars['Int']['input'];
-}>;
-
-
-export type GetEditionPageCountQuery = { __typename?: 'query_root', editions_by_pk?: { __typename?: 'editions', id: number, book: { __typename?: 'books', pages?: number | null } } | null };
-
 export type GetUserCurrentBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserCurrentBooksQuery = { __typename?: 'query_root', me: Array<{ __typename?: 'users', user_books: Array<{ __typename?: 'user_books', last_read_date?: string | null, first_started_reading_date?: string | null, book: { __typename?: 'books', id: number, title?: string | null, image?: { __typename?: 'images', url?: string | null } | null }, edition?: { __typename?: 'editions', id: number, image?: { __typename?: 'images', url?: string | null } | null } | null, user_book_reads: Array<{ __typename?: 'user_book_reads', id: number, progress_pages?: number | null, progress_seconds?: number | null, started_at?: string | null, progress?: number | null, user_book?: { __typename?: 'user_books', status_id: number } | null }> }> }> };
+export type GetUserCurrentBooksQuery = { __typename?: 'query_root', me: Array<{ __typename?: 'users', user_books: Array<{ __typename?: 'user_books', last_read_date?: string | null, first_started_reading_date?: string | null, book: { __typename?: 'books', id: number, title?: string | null, default_physical_edition_id?: number | null, pages?: number | null, image?: { __typename?: 'images', url?: string | null } | null }, edition?: { __typename?: 'editions', id: number } | null, user_book_reads: Array<{ __typename?: 'user_book_reads', id: number, progress_pages?: number | null, progress_seconds?: number | null, started_at?: string | null, progress?: number | null, user_book?: { __typename?: 'user_books', status_id: number, edition_id?: number | null } | null }> }> }> };
 
 export type UpdateUserBookReadMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -19456,16 +19449,6 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const GetEditionPageCountDocument = new TypedDocumentString(`
-    query GetEditionPageCount($editionId: Int!) {
-  editions_by_pk(id: $editionId) {
-    id
-    book {
-      pages
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<GetEditionPageCountQuery, GetEditionPageCountQueryVariables>;
 export const GetUserCurrentBooksDocument = new TypedDocumentString(`
     query GetUserCurrentBooks {
   me {
@@ -19476,14 +19459,13 @@ export const GetUserCurrentBooksDocument = new TypedDocumentString(`
         }
         id
         title
+        default_physical_edition_id
+        pages
       }
       last_read_date
       first_started_reading_date
       edition {
         id
-        image {
-          url
-        }
       }
       user_book_reads {
         id
@@ -19493,6 +19475,7 @@ export const GetUserCurrentBooksDocument = new TypedDocumentString(`
         progress
         user_book {
           status_id
+          edition_id
         }
       }
     }

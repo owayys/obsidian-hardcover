@@ -1,8 +1,0 @@
-query GetEditionPageCount($editionId: Int!) {
-  editions_by_pk(id: $editionId) {
-    id
-    book {
-      pages
-    }
-  }
-}

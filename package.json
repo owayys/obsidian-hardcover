@@ -32,6 +32,8 @@
 		"typescript-eslint": "8.35.1"
 	},
 	"dependencies": {
+		"@tanstack/react-query": "^5.90.18",
+		"@tanstack/react-query-devtools": "^5.91.2",
 		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
 		"graphql": "^16.12.0",

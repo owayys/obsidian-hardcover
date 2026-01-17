@@ -7,14 +7,13 @@ query GetUserCurrentBooks {
         }
         id
         title
+        default_physical_edition_id
+        pages
       }
       last_read_date
       first_started_reading_date
       edition {
         id
-        image {
-          url
-        }
       }
       user_book_reads {
         id
@@ -24,6 +23,7 @@ query GetUserCurrentBooks {
         progress
         user_book {
           status_id
+          edition_id
         }
       }
     }
