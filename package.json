@@ -1,44 +1,43 @@
 {
-	"name": "obsidian-hardcover",
-	"version": "1.0.0",
-	"description": "This is a hardcover.app plugin for Obsidian (https://obsidian.md)",
-	"main": "main.js",
-	"type": "module",
-	"scripts": {
-		"dev": "tsup --watch",
-		"build": "tsc -noEmit -skipLibCheck && tsup",
-		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"lint": "eslint .",
-		"codegen": "graphql-codegen --config codegen.ts"
-	},
-	"keywords": [],
-	"license": "0-BSD",
-	"devDependencies": {
-		"@0no-co/graphqlsp": "^1.15.2",
-		"@biomejs/biome": "2.3.8",
-		"@eslint/js": "9.30.1",
-		"@graphql-codegen/cli": "^6.1.1",
-		"@graphql-codegen/introspection": "5.0.0",
-		"@graphql-codegen/schema-ast": "^5.0.0",
-		"@graphql-codegen/typescript-document-nodes": "5.0.7",
-		"@parcel/watcher": "^2.5.1",
-		"@types/node": "^16.11.6",
-		"eslint-plugin-obsidianmd": "0.1.9",
-		"globals": "14.0.0",
-		"jiti": "2.6.1",
-		"tslib": "2.4.0",
-		"tsup": "^8.0.2",
-		"typescript": "^5.9.3",
-		"typescript-eslint": "8.35.1"
-	},
-	"dependencies": {
-		"@tanstack/react-query": "^5.90.18",
-		"@tanstack/react-query-devtools": "^5.91.2",
-		"@types/react": "^19.2.8",
-		"@types/react-dom": "^19.2.3",
-		"graphql": "^16.12.0",
-		"obsidian": "latest",
-		"react": "^19.2.3",
-		"react-dom": "^19.2.3"
-	}
+  "name": "obsidian-hardcover",
+  "version": "1.0.0",
+  "description": "This is a hardcover.app plugin for Obsidian (https://obsidian.md)",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsc -noEmit -skipLibCheck && tsup",
+    "version": "node version-bump.mjs && git add manifest.json versions.json",
+    "lint": "biome check --write",
+    "codegen": "graphql-codegen --config codegen.ts"
+  },
+  "keywords": [],
+  "license": "0-BSD",
+  "devDependencies": {
+    "@0no-co/graphqlsp": "^1.15.2",
+    "@biomejs/biome": "2.3.8",
+    "@graphql-codegen/cli": "^6.1.1",
+    "@graphql-codegen/introspection": "5.0.0",
+    "@graphql-codegen/schema-ast": "^5.0.0",
+    "@graphql-codegen/typescript-document-nodes": "5.0.7",
+    "@parcel/watcher": "^2.5.1",
+    "@types/node": "^16.11.6",
+    "eslint-plugin-obsidianmd": "0.1.9",
+    "globals": "14.0.0",
+    "jiti": "2.6.1",
+    "tslib": "2.4.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "8.35.1"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.18",
+    "@tanstack/react-query-devtools": "^5.91.2",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "graphql": "^16.12.0",
+    "obsidian": "latest",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
 }
