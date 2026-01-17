@@ -152,6 +152,95 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 
 ## Common tasks
 
+### State management with TanStack Query
+
+This project uses TanStack Query for GraphQL state management:
+
+**api/hooks.ts** - Query and mutation hooks:
+```ts
+export const useCurrentBooks = () => useQuery({
+  queryKey: queryKeys.currentBooks(),
+  queryFn: async () => {
+    if (!hardcoverClient) throw new Error("Client not initialized");
+    const result = await hardcoverClient.getUserCurrentBooks();
+    return result.me?.[0]?.user_books ?? [];
+  },
+  staleTime: 5 * 60 * 1000,
+});
+
+export const useUpdateReadingProgress = () => useMutation({
+  mutationFn: ({ readingSessionId, progressPages }) =>
+    hardcoverClient.updateReadingProgress(readingSessionId, progressPages),
+  onSuccess: (data, variables) => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.currentBooks() });
+    queryClient.setQueryData(queryKeys.userBookRead(variables.readingSessionId), data);
+  },
+});
+```
+
+**api/queryKeys.ts** - Query key structure:
+```ts
+export const queryKeys = {
+  all: ["hardcover"] as const,
+  currentBooks: () => [...queryKeys.all, "currentBooks"] as const,
+  editionPageCount: (editionId: number) => [...queryKeys.all, "editionPageCount", editionId] as const,
+  userBookRead: (id: number) => [...queryKeys.all, "userBookRead", id] as const,
+};
+```
+
+**ui/QueryProvider.tsx** - React Query provider:
+```ts
+export const HardcoverQueryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    {children}
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
+);
+```
+
+### Component structure
+
+**ui/BookList.tsx** - Main container with data fetching:
+```ts
+export const BookList: React.FC = () => {
+  const { data: userBooks = [], isLoading, isError, error, refetch } = useCurrentBooks();
+  
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <ErrorDisplay error={error} onRetry={refetch} />;
+  if (userBooks.length === 0) return <EmptyState />;
+  
+  return (
+    <div className="hardcover-book-list">
+      {userBooks.map(userBook => (
+        <Book key={userBook.book.id} userBook={userBook} />
+      ))}
+    </div>
+  );
+};
+```
+
+**ui/Book.tsx** - Individual book component:
+```ts
+export const Book: React.FC<{ userBook: UserBook }> = ({ userBook }) => {
+  const { data: editionData } = useEditionPageCount(userBook.edition?.id ?? 0);
+  const totalPages = editionData?.editions_by_pk?.book?.pages;
+  
+  return (
+    <div className="hardcover-book">
+      <BookCover userBook={userBook} />
+      <BookInfo userBook={userBook} />
+      {userBook.user_book_reads?.[0] && (
+        <Progress
+          readingSession={userBook.user_book_reads[0]}
+          editionId={userBook.edition?.id}
+          totalPages={totalPages}
+        />
+      )}
+    </div>
+  );
+};
+```
+
 ### Organize code across multiple files
 
 **main.ts** (minimal, lifecycle only):
