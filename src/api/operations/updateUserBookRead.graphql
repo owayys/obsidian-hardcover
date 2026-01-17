@@ -1,0 +1,10 @@
+mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {
+  update_user_book_read(id: $id, object: $object) {
+    id
+    user_book_read {
+      id
+      progress_pages
+      progress
+    }
+  }
+}

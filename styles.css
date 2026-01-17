@@ -6,3 +6,161 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+/* Hardcover plugin styles */
+.hardcover-book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.hardcover-book {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hardcover-book-cover img {
+  width: 100%;
+  max-width: 120px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hardcover-book-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  max-width: 150px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  font-size: 0.85em;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.hardcover-book-last-read {
+  margin-top: 2px;
+  font-size: 0.7em;
+  color: var(--text-faint);
+}
+
+.hardcover-progress {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.hardcover-progress button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 0.9em;
+  cursor: pointer;
+  background-color: var(--background-secondary);
+  border: 1px solid var(--divider-color);
+  border-radius: 3px;
+}
+
+.hardcover-progress button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hardcover-progress-text {
+  min-width: 50px;
+  font-size: 0.75em;
+  color: var(--text-muted);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: none;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.hardcover-loading .spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 16px;
+  border: 3px solid var(--background-modifier-border);
+  border-top: 3px solid var(--interactive-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.hardcover-loading-container {
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.hardcover-loading-text {
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+.hardcover-error-container {
+  padding: 32px 16px;
+  color: var(--text-error);
+  text-align: center;
+}
+
+.hardcover-error-title {
+  margin-bottom: 8px;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.hardcover-error-message {
+  margin-bottom: 16px;
+  font-size: 0.9em;
+}
+
+.hardcover-error-retry {
+  padding: 8px 16px;
+  font-size: 0.9em;
+  color: var(--text-on-accent);
+  cursor: pointer;
+  background-color: var(--interactive-accent);
+  border: 1px solid var(--interactive-accent);
+  border-radius: 4px;
+}
+
+.hardcover-empty-container {
+  padding: 32px 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.hardcover-empty-icon {
+  margin-bottom: 8px;
+  font-size: 1.2em;
+}
+
+.hardcover-empty-title {
+  font-size: 0.9em;
+}
+
+.hardcover-empty-subtitle {
+  margin-top: 8px;
+  font-size: 0.8em;
+}

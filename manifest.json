@@ -1,11 +1,11 @@
 {
-	"id": "obsidian-hardcover",
-	"name": "Hardcover (Unofficial)",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Hardcover.app integration for Obsidian.",
-	"author": "owayys",
-	"authorUrl": "https://github.com/owayys",
-	"fundingUrl": "https://hardcover.app",
-	"isDesktopOnly": false
+  "id": "obsidian-hardcover",
+  "name": "Hardcover (Unofficial)",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Hardcover.app integration for Obsidian.",
+  "author": "owayys",
+  "authorUrl": "https://github.com/owayys",
+  "fundingUrl": "https://hardcover.app",
+  "isDesktopOnly": false
 }

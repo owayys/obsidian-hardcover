@@ -12,7 +12,7 @@
       "language_servers": ["tsgo", "!vtsls", "oxc", "biome"]
     },
     "TypeScript": {
-      "language_servers": ["tsgo", "vtsls", "oxc", "biome"],
+      "language_servers": ["tsgo", "!vtsls", "oxc", "biome"],
       "code_actions_on_format": {
         "source.fixAll.biome": true
       },
@@ -23,7 +23,25 @@
       }
     },
     "TSX": {
-      "language_servers": ["tsgo", "!vtsls", "oxc", "biome"]
+      "language_servers": ["tsgo", "!vtsls", "oxc", "biome"],
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      },
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
+    },
+    "CSS": {
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      },
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
     },
     "JSON": {
       "language_servers": ["biome", "json-language-server"]
