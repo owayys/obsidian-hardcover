@@ -1,19 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { HardcoverClient } from "../client"
+import { getHardcoverClient } from "./client"
 import { queryKeys } from "./queryKeys"
-
-let hardcoverClient: HardcoverClient | null = null
-
-export const initializeHardcoverClient = (token: string) => {
-  hardcoverClient = new HardcoverClient(token)
-}
-
-export const getHardcoverClient = () => hardcoverClient
 
 export const useCurrentBooks = () => {
   return useQuery({
     queryKey: queryKeys.currentBooks(),
     queryFn: async () => {
+      const hardcoverClient = getHardcoverClient()
       if (!hardcoverClient) {
         throw new Error("Hardcover client not initialized")
       }
@@ -38,6 +31,7 @@ export const useUpdateReadingProgress = () => {
       progressPages: number
       progressSeconds?: number
     }) => {
+      const hardcoverClient = getHardcoverClient()
       if (!hardcoverClient) {
         throw new Error("Hardcover client not initialized")
       }

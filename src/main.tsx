@@ -1,6 +1,6 @@
 import { Notice, Plugin } from "obsidian"
 import "react"
-import { initializeHardcoverClient } from "@hooks/progress"
+import { initializeHardcoverClient } from "@hooks/client"
 import { BookList } from "@ui/BookList"
 import { HardcoverQueryProvider } from "@ui/QueryProvider"
 import { createRoot, Root } from "react-dom/client"
@@ -8,11 +8,12 @@ import { HardcoverClient } from "@/client"
 import {
   DEFAULT_SETTINGS,
   HardcoverSettingTab,
-  MyPluginSettings,
+  PluginSettings,
 } from "@/settings"
+import { TOKEN_KEY } from "./constants"
 
 export default class HardcoverPlugin extends Plugin {
-  settings: MyPluginSettings
+  settings: PluginSettings
   hardcoverClient: HardcoverClient | null = null
   private roots: Map<HTMLElement, Root> = new Map()
 
@@ -26,11 +27,10 @@ export default class HardcoverPlugin extends Plugin {
   async onload() {
     await this.loadSettings()
 
-    if (this.settings.hardcoverApiToken) {
-      this.hardcoverClient = new HardcoverClient(
-        this.settings.hardcoverApiToken,
-      )
-      initializeHardcoverClient(this.settings.hardcoverApiToken)
+    const apiToken = this.app.secretStorage.getSecret(TOKEN_KEY)
+    if (apiToken) {
+      this.hardcoverClient = new HardcoverClient(apiToken)
+      initializeHardcoverClient(apiToken)
     }
 
     this.registerMarkdownCodeBlockProcessor(
@@ -82,17 +82,16 @@ export default class HardcoverPlugin extends Plugin {
     this.settings = Object.assign(
       {},
       DEFAULT_SETTINGS,
-      (await this.loadData()) as Partial<MyPluginSettings>,
+      (await this.loadData()) as Partial<PluginSettings>,
     )
   }
 
   async saveSettings() {
     await this.saveData(this.settings)
-    if (this.settings.hardcoverApiToken) {
-      this.hardcoverClient = new HardcoverClient(
-        this.settings.hardcoverApiToken,
-      )
-      initializeHardcoverClient(this.settings.hardcoverApiToken)
+    const apiToken = this.app.secretStorage.getSecret(TOKEN_KEY)
+    if (apiToken) {
+      this.hardcoverClient = new HardcoverClient(apiToken)
+      initializeHardcoverClient(apiToken)
     } else {
       this.hardcoverClient = null
     }

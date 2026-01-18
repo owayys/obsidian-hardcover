@@ -1,7 +1,3 @@
-/**
- * Hardcover.app GraphQL API client using Obsidian's requestUrl
- */
-
 import { requestUrl } from "obsidian"
 import type { TypedDocumentString } from "@/api/client/graphql"
 import {
@@ -25,12 +21,6 @@ export class HardcoverClient {
     this.token = token
   }
 
-  /**
-   * Generic GraphQL query method with type safety
-   * @param document Typed GraphQL document from codegen
-   * @param variables Optional query variables
-   * @returns Typed response data
-   */
   private async query<TData, TVariables extends Record<string, unknown>>(
     document: TypedDocumentString<TData, TVariables>,
     variables?: TVariables,
@@ -56,7 +46,6 @@ export class HardcoverClient {
       // biome-ignore lint/suspicious/noExplicitAny: external API response
       const result: any = response.json
 
-      // Check for GraphQL errors
       if (result.errors && result.errors.length > 0) {
         const errorMessage = result.errors
           .map((e: GraphQLError) => e.message)
@@ -77,19 +66,10 @@ export class HardcoverClient {
     }
   }
 
-  /**
-   * Get user's current books (reading status: 2)
-   */
   async getUserCurrentBooks(): Promise<GetUserCurrentBooksQuery> {
     return this.query(GetUserCurrentBooksDocument)
   }
 
-  /**
-   * Update reading progress for a user book read session
-   * @param readingSessionId The user_book_reads ID
-   * @param progressPages Current page number
-   * @param progressSeconds Reading time in seconds (optional)
-   */
   async updateReadingProgress(
     readingSessionId: number,
     progressPages: number,
@@ -105,9 +85,6 @@ export class HardcoverClient {
     return this.query(UpdateUserBookReadDocument, variables)
   }
 
-  /**
-   * Update token (in case it needs to be refreshed)
-   */
   setToken(token: string): void {
     this.token = token
   }
