@@ -24,12 +24,12 @@ export const useUpdateReadingProgress = () => {
   return useMutation({
     mutationFn: async ({
       readingSessionId,
+      editionId,
       progressPages,
-      progressSeconds,
     }: {
       readingSessionId: number
+      editionId: number
       progressPages: number
-      progressSeconds?: number
     }) => {
       const hardcoverClient = getHardcoverClient()
       if (!hardcoverClient) {
@@ -37,8 +37,8 @@ export const useUpdateReadingProgress = () => {
       }
       return hardcoverClient.updateReadingProgress(
         readingSessionId,
+        editionId,
         progressPages,
-        progressSeconds,
       )
     },
     onSuccess: (data, variables) => {
