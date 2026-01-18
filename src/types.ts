@@ -5,7 +5,6 @@ export interface Book {
   image?: {
     url?: string | null
   } | null
-  default_physical_edition_id?: number | null
   pages?: number | null
 }
 
@@ -22,33 +21,24 @@ export interface ReadingSession {
   progress_seconds?: number | null
   progress?: number | null
   started_at?: string | null
-  user_book?: {
-    status_id?: number | null
-    edition_id?: number | null
+  edition?: {
+    id: number
+    pages?: number | null
+    image?: {
+      url?: string | null
+    } | null
   } | null
 }
 
 export interface UserBook {
   book: Book
-  edition?: Edition | null
   user_book_reads?: ReadingSession[] | null
-  last_read_date?: string | null
-  first_started_reading_date?: string | null
 }
 
 export interface HardcoverBooksResponse {
   me?: Array<{
     user_books?: UserBook[] | null
   }> | null
-}
-
-export interface EditionPageCountResponse {
-  editions_by_pk?: {
-    id: number
-    book?: {
-      pages?: number | null
-    } | null
-  } | null
 }
 
 export interface UpdateUserBookReadResponse {
