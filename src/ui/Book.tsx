@@ -20,6 +20,7 @@ export const Book: React.FC<BookProps> = ({ userBook }) => {
             alt={userBook.book.title ?? "Book cover"}
             loading="lazy"
             src={coverUrl}
+            title={userBook.book.title ?? "Book cover"}
           />
         </div>
       )}
