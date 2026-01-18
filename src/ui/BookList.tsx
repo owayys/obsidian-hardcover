@@ -13,7 +13,12 @@ export const BookList: React.FC<BookListProps> = ({ className }) => {
     isError,
     error,
     refetch,
+    isRefetching,
   } = useCurrentBooks()
+
+  const onRefetch = async () => {
+    await refetch()
+  }
 
   if (isLoading) {
     return (
@@ -36,9 +41,7 @@ export const BookList: React.FC<BookListProps> = ({ className }) => {
           </div>
           <button
             className="hardcover-error-retry"
-            onClick={() => {
-              void refetch()
-            }}
+            onClick={onRefetch}
             type="button">
             Retry
           </button>
@@ -68,6 +71,12 @@ export const BookList: React.FC<BookListProps> = ({ className }) => {
       {userBooks.map((userBook) => (
         <Book key={userBook.book.id} userBook={userBook} />
       ))}
+      <button
+        disabled={isLoading || isRefetching}
+        onClick={onRefetch}
+        type="button">
+        {isRefetching ? "⟳" : "↻"}
+      </button>
     </div>
   )
 }

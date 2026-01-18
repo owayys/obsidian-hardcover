@@ -20,17 +20,10 @@ export const Book: React.FC<BookProps> = ({ userBook }) => {
             alt={userBook.book.title ?? "Book cover"}
             loading="lazy"
             src={coverUrl}
+            title={userBook.book.title ?? "Book cover"}
           />
         </div>
       )}
-
-      <div className="hardcover-book-info">
-        {userBook.last_read_date && (
-          <div className="hardcover-book-last-read">
-            Last read: {new Date(userBook.last_read_date).toLocaleDateString()}
-          </div>
-        )}
-      </div>
 
       {latestRead && (
         <Progress readingSession={latestRead} totalPages={totalPages} />

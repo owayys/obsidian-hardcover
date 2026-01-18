@@ -75,42 +75,7 @@ export default class HardcoverPlugin extends Plugin {
       },
     )
 
-    this.addRibbonIcon("book", "Hardcover", (_evt: MouseEvent) => {
-      if (!this.hardcoverClient) {
-        new Notice("Hardcover API token not configured")
-        return
-      }
-      this.testHardcoverConnection()
-    })
-
-    const statusBarItemEl = this.addStatusBarItem()
-    statusBarItemEl.setText("Hardcover")
-
-    this.addCommand({
-      id: "hardcover-test-connection",
-      name: "Test Hardcover connection",
-      callback: () => this.testHardcoverConnection(),
-    })
-
     this.addSettingTab(new HardcoverSettingTab(this.app, this))
-  }
-
-  private async testHardcoverConnection(): Promise<void> {
-    if (!this.hardcoverClient) {
-      new Notice("⚠️ Hardcover API token not configured")
-      return
-    }
-
-    try {
-      const result = await this.hardcoverClient.getUserCurrentBooks()
-      const userBooks = result.me?.[0]?.user_books
-      const bookCount = userBooks?.length ?? 0
-      new Notice(`✅ Connected to Hardcover! Found ${bookCount} books.`)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Unknown error"
-      new Notice(`❌ Connection failed: ${message}`)
-      console.error("Hardcover connection error:", error)
-    }
   }
 
   async loadSettings() {
