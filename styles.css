@@ -16,13 +16,24 @@ If your plugin does not need CSS, delete this file.
   padding: 8px;
 }
 
-.hardcover-list-refresh-button {
+.hardcover-book-list button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 0.9em;
+  cursor: pointer;
+  background-color: var(--background-secondary);
+  border: 1px solid var(--divider-color);
+  border-radius: 3px;
+}
+
+.hardcover-book-list > button {
   position: absolute;
   right: 8px;
   bottom: 8px;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
 }
 
 .hardcover-book {
@@ -41,25 +52,6 @@ If your plugin does not need CSS, delete this file.
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.hardcover-book-title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  max-width: 150px;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  font-size: 0.85em;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-.hardcover-book-last-read {
-  margin-top: 2px;
-  font-size: 0.7em;
-  color: var(--text-faint);
-}
-
 .hardcover-progress {
   display: flex;
   gap: 4px;
@@ -67,17 +59,6 @@ If your plugin does not need CSS, delete this file.
   justify-content: space-between;
   width: 100%;
   margin-bottom: 4px;
-}
-
-.hardcover-progress button {
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  font-size: 0.9em;
-  cursor: pointer;
-  background-color: var(--background-secondary);
-  border: 1px solid var(--divider-color);
-  border-radius: 3px;
 }
 
 .hardcover-progress button:disabled {
