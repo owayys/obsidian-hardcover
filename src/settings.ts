@@ -1,18 +1,19 @@
-import { App, PluginSettingTab, Setting } from "obsidian"
-import MyPlugin from "@/main"
+import { App, PluginSettingTab, SecretComponent, Setting } from "obsidian"
+import { TOKEN_KEY } from "@/constants"
+import HardcoverPlugin from "@/main"
 
-export interface MyPluginSettings {
-  hardcoverApiToken: string
+export type PluginSettings = {
+  [TOKEN_KEY]: string
 }
 
-export const DEFAULT_SETTINGS: MyPluginSettings = {
-  hardcoverApiToken: "",
+export const DEFAULT_SETTINGS: PluginSettings = {
+  [TOKEN_KEY]: "",
 }
 
 export class HardcoverSettingTab extends PluginSettingTab {
-  plugin: MyPlugin
+  plugin: HardcoverPlugin
 
-  constructor(app: App, plugin: MyPlugin) {
+  constructor(app: App, plugin: HardcoverPlugin) {
     super(app, plugin)
     this.plugin = plugin
   }
@@ -29,13 +30,12 @@ export class HardcoverSettingTab extends PluginSettingTab {
       .setDesc(
         "Get your API token from your Hardcover account settings. Visit docs.hardcover.app/api/getting-started/ to learn how.",
       )
-      .addText((text) =>
-        text
-          .setPlaceholder("Enter your Hardcover API token")
-          .setValue(this.plugin.settings.hardcoverApiToken)
-          .onChange(async (value) => {
-            this.plugin.settings.hardcoverApiToken = value
-            await this.plugin.saveSettings()
+      .addComponent((el) =>
+        new SecretComponent(this.app, el)
+          .setValue(this.plugin.settings[TOKEN_KEY])
+          .onChange((value) => {
+            this.plugin.settings[TOKEN_KEY] = value
+            this.plugin.saveSettings()
           }),
       )
   }
