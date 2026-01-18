@@ -22,7 +22,6 @@ export const Progress: React.FC<ProgressProps> = ({
 
   const updateProgressMutation = useUpdateReadingProgress()
 
-  // Sync with server data when it changes
   React.useEffect(() => {
     setLocalProgress({
       pages: readingSession.progress_pages ?? 0,

@@ -9,10 +9,20 @@ If your plugin does not need CSS, delete this file.
 
 /* Hardcover plugin styles */
 .hardcover-book-list {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 12px;
-  padding: 8px 0;
+  padding: 8px;
+}
+
+.hardcover-list-refresh-button {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 .hardcover-book {

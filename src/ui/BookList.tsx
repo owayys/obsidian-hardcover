@@ -13,7 +13,12 @@ export const BookList: React.FC<BookListProps> = ({ className }) => {
     isError,
     error,
     refetch,
+    isRefetching,
   } = useCurrentBooks()
+
+  const onRefresh = async () => {
+    await refetch()
+  }
 
   if (isLoading) {
     return (
@@ -68,6 +73,13 @@ export const BookList: React.FC<BookListProps> = ({ className }) => {
       {userBooks.map((userBook) => (
         <Book key={userBook.book.id} userBook={userBook} />
       ))}
+      <button
+        className="hardcover-list-refresh-button"
+        disabled={isLoading || isRefetching}
+        onClick={onRefresh}
+        type="button">
+        {isRefetching ? "⟳" : "↻"}
+      </button>
     </div>
   )
 }
