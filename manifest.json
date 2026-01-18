@@ -1,7 +1,7 @@
 {
   "id": "obsidian-hardcover",
   "name": "Hardcover (Unofficial)",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "minAppVersion": "0.15.0",
   "description": "Hardcover.app integration for Obsidian.",
   "author": "owayys",
