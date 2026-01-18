@@ -8,9 +8,10 @@ interface BookProps {
 
 export const Book: React.FC<BookProps> = ({ userBook }) => {
   const latestRead = userBook.user_book_reads?.[0]
-  const totalPages = userBook.book.pages ?? undefined
+  const totalPages =
+    latestRead?.edition?.pages ?? userBook.book.pages ?? undefined
 
-  const coverUrl = userBook.edition?.image?.url ?? userBook.book.image?.url
+  const coverUrl = latestRead?.edition?.image?.url ?? userBook.book.image?.url
 
   return (
     <div className="hardcover-book">
@@ -25,8 +26,12 @@ export const Book: React.FC<BookProps> = ({ userBook }) => {
         </div>
       )}
 
-      {latestRead && (
-        <Progress readingSession={latestRead} totalPages={totalPages} />
+      {latestRead?.edition?.id && (
+        <Progress
+          editionId={latestRead.edition.id}
+          readingSession={latestRead}
+          totalPages={totalPages}
+        />
       )}
     </div>
   )

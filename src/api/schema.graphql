@@ -23,6 +23,7 @@ input AuthorInputType {
   bio: String
   born_date: date
   born_year: Int
+  curation_status: String
   death_date: date
   death_year: Int
   gender_id: Int
@@ -93,6 +94,7 @@ type BookIdType {
 input BookInput {
   book_status_id: Int
   canonical_id: Int
+  curation_status: String
   default_audio_edition_id: Int
   default_cover_edition_id: Int
   default_ebook_edition_id: Int
@@ -100,7 +102,6 @@ input BookInput {
   dto: BookDtoType
   locked: Boolean
   slug: String
-  user_added: Boolean
 }
 
 type BookMappingIdType {
@@ -154,6 +155,7 @@ type CharacterIdType {
 
 input CharacterInput {
   biography: String
+  curation_status: String
   gender_id: Int
   has_disability: Boolean
   image_id: Int
@@ -242,8 +244,22 @@ type EditionIdType {
 
 input EditionInput {
   book_id: Int
+  curation_status: String
   dto: BookDtoInput
   locked: Boolean
+}
+
+type FollowDeleteType {
+  error: String
+  success: Boolean!
+}
+
+type FollowType {
+  error: String
+  follow: follows
+  followable_id: Int
+  followable_type: String
+  id: Int
 }
 
 type FollowedListType {
@@ -424,6 +440,7 @@ type PublisherIdType {
 
 input PublisherInputType {
   canonical_id: Int
+  curation_status: String
   locked: Boolean
   name: String
   slug: String
@@ -499,6 +516,7 @@ input SeriesInput {
 
 input SeriesInputType {
   author_id: Int
+  curation_status: String
   description: String
   id: Int
   is_completed: Boolean
@@ -2881,6 +2899,7 @@ type books {
   ): contributions_aggregate!
   created_at: timestamp!
   created_by_user_id: Int
+  curation_status: Int!
   """An object relationship"""
   default_audio_edition: editions
   default_audio_edition_id: Int
@@ -3059,7 +3078,6 @@ type books {
   ): taggings_aggregate!
   title: String
   updated_at: timestamptz
-  user_added: Boolean!
   """An array relationship"""
   user_books(
     """distinct select on columns"""
@@ -3167,6 +3185,7 @@ type books_avg_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -3200,6 +3219,7 @@ input books_avg_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3253,6 +3273,7 @@ input books_bool_exp {
   contributions_aggregate: contributions_aggregate_bool_exp
   created_at: timestamp_comparison_exp
   created_by_user_id: Int_comparison_exp
+  curation_status: Int_comparison_exp
   default_audio_edition: editions_bool_exp
   default_audio_edition_id: Int_comparison_exp
   default_cover_edition: editions_bool_exp
@@ -3299,7 +3320,6 @@ input books_bool_exp {
   taggings_aggregate: taggings_aggregate_bool_exp
   title: String_comparison_exp
   updated_at: timestamptz_comparison_exp
-  user_added: Boolean_comparison_exp
   user_books: user_books_bool_exp
   user_books_aggregate: user_books_aggregate_bool_exp
   users_count: Int_comparison_exp
@@ -3315,6 +3335,7 @@ type books_max_fields {
   canonical_id: Int
   created_at: timestamp
   created_by_user_id: Int
+  curation_status: Int
   default_audio_edition_id: Int
   default_cover_edition_id: Int
   default_ebook_edition_id: Int
@@ -3357,6 +3378,7 @@ input books_max_order_by {
   canonical_id: order_by
   created_at: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3397,6 +3419,7 @@ type books_min_fields {
   canonical_id: Int
   created_at: timestamp
   created_by_user_id: Int
+  curation_status: Int
   default_audio_edition_id: Int
   default_cover_edition_id: Int
   default_ebook_edition_id: Int
@@ -3439,6 +3462,7 @@ input books_min_order_by {
   canonical_id: order_by
   created_at: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3493,6 +3517,7 @@ input books_order_by {
   contributions_aggregate: contributions_aggregate_order_by
   created_at: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition: editions_order_by
   default_audio_edition_id: order_by
   default_cover_edition: editions_order_by
@@ -3536,7 +3561,6 @@ input books_order_by {
   taggings_aggregate: taggings_aggregate_order_by
   title: order_by
   updated_at: order_by
-  user_added: order_by
   user_books_aggregate: user_books_aggregate_order_by
   users_count: order_by
   users_read_count: order_by
@@ -3574,6 +3598,8 @@ enum books_select_column {
   created_at
   """column name"""
   created_by_user_id
+  """column name"""
+  curation_status
   """column name"""
   default_audio_edition_id
   """column name"""
@@ -3635,8 +3661,6 @@ enum books_select_column {
   """column name"""
   updated_at
   """column name"""
-  user_added
-  """column name"""
   users_count
   """column name"""
   users_read_count
@@ -3650,8 +3674,6 @@ enum books_select_column_books_aggregate_bool_exp_bool_and_arguments_columns {
   compilation
   """column name"""
   locked
-  """column name"""
-  user_added
 }
 
 """
@@ -3662,8 +3684,6 @@ enum books_select_column_books_aggregate_bool_exp_bool_or_arguments_columns {
   compilation
   """column name"""
   locked
-  """column name"""
-  user_added
 }
 
 """aggregate stddev on columns"""
@@ -3674,6 +3694,7 @@ type books_stddev_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -3707,6 +3728,7 @@ input books_stddev_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3738,6 +3760,7 @@ type books_stddev_pop_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -3771,6 +3794,7 @@ input books_stddev_pop_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3802,6 +3826,7 @@ type books_stddev_samp_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -3835,6 +3860,7 @@ input books_stddev_samp_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3884,6 +3910,7 @@ input books_stream_cursor_value_input {
   compilation: Boolean
   created_at: timestamp
   created_by_user_id: Int
+  curation_status: Int
   default_audio_edition_id: Int
   default_cover_edition_id: Int
   default_ebook_edition_id: Int
@@ -3914,7 +3941,6 @@ input books_stream_cursor_value_input {
   subtitle: String
   title: String
   updated_at: timestamptz
-  user_added: Boolean
   users_count: Int
   users_read_count: Int
 }
@@ -3927,6 +3953,7 @@ type books_sum_fields {
   book_status_id: smallint
   canonical_id: Int
   created_by_user_id: Int
+  curation_status: Int
   default_audio_edition_id: Int
   default_cover_edition_id: Int
   default_ebook_edition_id: Int
@@ -3960,6 +3987,7 @@ input books_sum_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -3991,6 +4019,7 @@ type books_var_pop_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -4024,6 +4053,7 @@ input books_var_pop_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -4055,6 +4085,7 @@ type books_var_samp_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -4088,6 +4119,7 @@ input books_var_samp_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -4119,6 +4151,7 @@ type books_variance_fields {
   book_status_id: Float
   canonical_id: Float
   created_by_user_id: Float
+  curation_status: Float
   default_audio_edition_id: Float
   default_cover_edition_id: Float
   default_ebook_edition_id: Float
@@ -4152,6 +4185,7 @@ input books_variance_order_by {
   book_status_id: order_by
   canonical_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   default_audio_edition_id: order_by
   default_cover_edition_id: order_by
   default_ebook_edition_id: order_by
@@ -5619,6 +5653,7 @@ type editions {
   country_id: Int
   created_at: timestamp!
   created_by_user_id: Int
+  curation_status: Int!
   edition_format: String
   edition_information: String
   id: Int!
@@ -5692,7 +5727,6 @@ type editions {
   subtitle: String
   title: String
   updated_at: timestamp!
-  user_added: Boolean!
   users_count: Int!
   users_read_count: Int!
 }
@@ -5723,6 +5757,7 @@ input editions_avg_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -5762,6 +5797,7 @@ input editions_bool_exp {
   country_id: Int_comparison_exp
   created_at: timestamp_comparison_exp
   created_by_user_id: Int_comparison_exp
+  curation_status: Int_comparison_exp
   edition_format: String_comparison_exp
   edition_information: String_comparison_exp
   id: Int_comparison_exp
@@ -5795,7 +5831,6 @@ input editions_bool_exp {
   subtitle: String_comparison_exp
   title: String_comparison_exp
   updated_at: timestamp_comparison_exp
-  user_added: Boolean_comparison_exp
   users_count: Int_comparison_exp
   users_read_count: Int_comparison_exp
 }
@@ -5811,6 +5846,7 @@ input editions_max_order_by {
   country_id: order_by
   created_at: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   edition_format: order_by
   edition_information: order_by
   id: order_by
@@ -5851,6 +5887,7 @@ input editions_min_order_by {
   country_id: order_by
   created_at: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   edition_format: order_by
   edition_information: order_by
   id: order_by
@@ -5898,6 +5935,7 @@ input editions_order_by {
   country_id: order_by
   created_at: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   edition_format: order_by
   edition_information: order_by
   id: order_by
@@ -5930,7 +5968,6 @@ input editions_order_by {
   subtitle: order_by
   title: order_by
   updated_at: order_by
-  user_added: order_by
   users_count: order_by
   users_read_count: order_by
 }
@@ -5963,6 +6000,8 @@ enum editions_select_column {
   created_at
   """column name"""
   created_by_user_id
+  """column name"""
+  curation_status
   """column name"""
   edition_format
   """column name"""
@@ -6016,8 +6055,6 @@ enum editions_select_column {
   """column name"""
   updated_at
   """column name"""
-  user_added
-  """column name"""
   users_count
   """column name"""
   users_read_count
@@ -6032,6 +6069,7 @@ input editions_stddev_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -6056,6 +6094,7 @@ input editions_stddev_pop_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -6080,6 +6119,7 @@ input editions_stddev_samp_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -6119,6 +6159,7 @@ input editions_stream_cursor_value_input {
   country_id: Int
   created_at: timestamp
   created_by_user_id: Int
+  curation_status: Int
   edition_format: String
   edition_information: String
   id: Int
@@ -6145,7 +6186,6 @@ input editions_stream_cursor_value_input {
   subtitle: String
   title: String
   updated_at: timestamp
-  user_added: Boolean
   users_count: Int
   users_read_count: Int
 }
@@ -6159,6 +6199,7 @@ input editions_sum_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -6183,6 +6224,7 @@ input editions_var_pop_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -6207,6 +6249,7 @@ input editions_var_samp_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -6231,6 +6274,7 @@ input editions_variance_order_by {
   canonical_id: order_by
   country_id: order_by
   created_by_user_id: order_by
+  curation_status: order_by
   id: order_by
   image_id: order_by
   language_id: order_by
@@ -7343,6 +7387,85 @@ type following_user_books_variance_fields {
   followed_user_id: Float
   user_book_id: Float
   user_id: Float
+}
+
+"""
+columns and relationships of "follows"
+"""
+type follows {
+  created_at: timestamp!
+  followable_id: bigint!
+  followable_type: String!
+  id: bigint!
+  updated_at: timestamp
+  """An object relationship"""
+  user: users!
+  user_id: bigint!
+}
+
+"""
+Boolean expression to filter rows from the table "follows". All fields are combined with a logical 'AND'.
+"""
+input follows_bool_exp {
+  _and: [follows_bool_exp!]
+  _not: follows_bool_exp
+  _or: [follows_bool_exp!]
+  created_at: timestamp_comparison_exp
+  followable_id: bigint_comparison_exp
+  followable_type: String_comparison_exp
+  id: bigint_comparison_exp
+  updated_at: timestamp_comparison_exp
+  user: users_bool_exp
+  user_id: bigint_comparison_exp
+}
+
+"""Ordering options when selecting data from "follows"."""
+input follows_order_by {
+  created_at: order_by
+  followable_id: order_by
+  followable_type: order_by
+  id: order_by
+  updated_at: order_by
+  user: users_order_by
+  user_id: order_by
+}
+
+"""
+select columns of table "follows"
+"""
+enum follows_select_column {
+  """column name"""
+  created_at
+  """column name"""
+  followable_id
+  """column name"""
+  followable_type
+  """column name"""
+  id
+  """column name"""
+  updated_at
+  """column name"""
+  user_id
+}
+
+"""
+Streaming cursor of the table "follows"
+"""
+input follows_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: follows_stream_cursor_value_input!
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input follows_stream_cursor_value_input {
+  created_at: timestamp
+  followable_id: bigint
+  followable_type: String
+  id: bigint
+  updated_at: timestamp
+  user_id: bigint
 }
 
 """
@@ -9418,6 +9541,8 @@ type mutation_root {
   delete_activities_by_pk(id: Int!): activities
   """delete_book_mapping"""
   delete_book_mapping(id: Int!): BookMappingIdType
+  """delete_follow"""
+  delete_follow(followable_id: Int!, followable_type: String!): FollowDeleteType
   """delete_followed_list"""
   delete_followed_list(list_id: Int!): DeleteListType
   """delete_followed_prompt"""
@@ -9505,6 +9630,8 @@ type mutation_root {
   insert_collection_import(object: CollectionImportInput!): CollectionImportIdType
   """insert_edition"""
   insert_edition(book_id: Int!, edition: EditionInput!): EditionIdType
+  """insert_follow"""
+  insert_follow(followable_id: Int!, followable_type: String!): FollowType
   """
   insert data into the table: "followed_prompts"
   """
@@ -12505,6 +12632,23 @@ type query_root {
     """filter the rows returned"""
     where: following_user_books_bool_exp
   ): following_user_books_aggregate!
+  """
+  fetch data from the table: "follows"
+  """
+  follows(
+    """distinct select on columns"""
+    distinct_on: [follows_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [follows_order_by!]
+    """filter the rows returned"""
+    where: follows_bool_exp
+  ): [follows!]!
+  """fetch data from the table: "follows" using primary key columns"""
+  follows_by_pk(id: bigint!): follows
   """An array relationship"""
   goals(
     """distinct select on columns"""
@@ -14585,6 +14729,34 @@ type subscription_root {
     """filter the rows returned"""
     where: following_user_books_bool_exp
   ): [following_user_books!]!
+  """
+  fetch data from the table: "follows"
+  """
+  follows(
+    """distinct select on columns"""
+    distinct_on: [follows_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [follows_order_by!]
+    """filter the rows returned"""
+    where: follows_bool_exp
+  ): [follows!]!
+  """fetch data from the table: "follows" using primary key columns"""
+  follows_by_pk(id: bigint!): follows
+  """
+  fetch data from the table in a streaming manner: "follows"
+  """
+  follows_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+    """cursor to stream the results returned by the query"""
+    cursor: [follows_stream_cursor_input]!
+    """filter the rows returned"""
+    where: follows_bool_exp
+  ): [follows!]!
   """An array relationship"""
   goals(
     """distinct select on columns"""

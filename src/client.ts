@@ -72,14 +72,14 @@ export class HardcoverClient {
 
   async updateReadingProgress(
     readingSessionId: number,
+    editionId: number,
     progressPages: number,
-    progressSeconds?: number,
   ): Promise<UpdateUserBookReadMutation> {
     const variables: UpdateUserBookReadMutationVariables = {
       id: readingSessionId,
       object: {
+        edition_id: editionId,
         progress_pages: progressPages,
-        ...(progressSeconds && { progress_seconds: progressSeconds }),
       },
     }
     return this.query(UpdateUserBookReadDocument, variables)

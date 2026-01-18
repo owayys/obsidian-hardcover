@@ -7,11 +7,13 @@ import type { ReadingSession } from "@/types"
 
 interface ProgressProps {
   readingSession: ReadingSession
+  editionId: number
   totalPages?: number
 }
 
 export const Progress: React.FC<ProgressProps> = ({
   readingSession,
+  editionId,
   totalPages,
 }) => {
   const [localProgress, setLocalProgress] = React.useState({
@@ -73,6 +75,7 @@ export const Progress: React.FC<ProgressProps> = ({
     debouncedUpdate(async () => {
       void updateProgressMutation.mutateAsync({
         readingSessionId: readingSession.id,
+        editionId,
         progressPages: newPages,
       })
     })
@@ -91,6 +94,7 @@ export const Progress: React.FC<ProgressProps> = ({
     debouncedUpdate(async () => {
       void updateProgressMutation.mutateAsync({
         readingSessionId: readingSession.id,
+        editionId,
         progressPages: newPages,
       })
     })
