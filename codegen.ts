@@ -11,7 +11,7 @@ const config: CodegenConfig = {
   },
   documents: "src/api/operations/**/*.graphql",
   generates: {
-    "src/api/client/": {
+    "src/api/generated/": {
       preset: "client",
       config: {
         documentMode: "string",

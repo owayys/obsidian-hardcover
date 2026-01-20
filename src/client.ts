@@ -2,14 +2,14 @@ import { requestUrl } from "obsidian"
 import type {
   GetUserBooksQueryVariables,
   TypedDocumentString,
-} from "@/api/client/graphql"
+} from "@/api/generated/graphql"
 import {
   GetUserBooksDocument,
   type GetUserBooksQuery,
   UpdateUserBookReadDocument,
   type UpdateUserBookReadMutation,
   type UpdateUserBookReadMutationVariables,
-} from "@/api/client/graphql"
+} from "@/api/generated/graphql"
 import { BookStatus } from "./types"
 
 interface GraphQLError {
