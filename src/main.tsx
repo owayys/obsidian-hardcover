@@ -11,13 +11,16 @@ import {
   PluginSettings,
 } from "@/settings"
 import { TOKEN_KEY } from "./constants"
+import { BookStatusKey } from "./types"
 
 export interface HardcoverParams {
   limit: number
+  status: BookStatusKey
 }
 
 const DEFAULT_PARAMS: HardcoverParams = {
   limit: 10,
+  status: "READING",
 }
 
 export default class HardcoverPlugin extends Plugin {
@@ -55,6 +58,12 @@ export default class HardcoverPlugin extends Plugin {
         if (!this.hardcoverClient) {
           new Notice("Hardcover API token not configured")
           return
+        }
+
+        const existingRoot = this.roots.get(el)
+        if (existingRoot) {
+          existingRoot.unmount()
+          this.roots.delete(el)
         }
 
         el.empty()

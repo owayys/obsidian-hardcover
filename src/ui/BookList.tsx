@@ -1,4 +1,4 @@
-import { useCurrentBooks } from "@hooks/progress"
+import { useUserBooks } from "@hooks/books"
 import { Book } from "@ui/Book"
 import * as React from "react"
 import { HardcoverParams } from "@/main"
@@ -16,8 +16,9 @@ export const BookList: React.FC<BookListProps> = ({ className, params }) => {
     error,
     refetch,
     isRefetching,
-  } = useCurrentBooks({
+  } = useUserBooks({
     limit: params.limit,
+    status: params.status,
   })
 
   const onRefetch = async () => {

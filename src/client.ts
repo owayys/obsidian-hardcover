@@ -10,7 +10,7 @@ import {
   type UpdateUserBookReadMutation,
   type UpdateUserBookReadMutationVariables,
 } from "@/api/client/graphql"
-import { BOOK_STATUS } from "./constants"
+import { BookStatus } from "./types"
 
 interface GraphQLError {
   message: string
@@ -70,10 +70,13 @@ export class HardcoverClient {
     }
   }
 
-  async getUserCurrentBooks(limit: number): Promise<GetUserBooksQuery> {
+  async getUserBooks(
+    limit: number,
+    statusId: BookStatus,
+  ): Promise<GetUserBooksQuery> {
     return this.query(GetUserBooksDocument, {
       limit,
-      statusId: BOOK_STATUS.READING,
+      statusId,
     } satisfies GetUserBooksQueryVariables)
   }
 

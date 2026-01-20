@@ -16,6 +16,10 @@ export interface Edition {
   } | null
 }
 
+export type BookStatus = (typeof BOOK_STATUS)[keyof typeof BOOK_STATUS]
+
+export type BookStatusKey = keyof typeof BOOK_STATUS
+
 export interface ReadingSession {
   id: number
   progress_pages?: number | null
@@ -30,7 +34,7 @@ export interface ReadingSession {
     } | null
   } | null
   user_book?: {
-    status_id?: (typeof BOOK_STATUS)[keyof typeof BOOK_STATUS] | null
+    status_id?: BookStatus | null
   } | null
 }
 
