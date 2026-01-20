@@ -1,12 +1,16 @@
 import { requestUrl } from "obsidian"
-import type { TypedDocumentString } from "@/api/client/graphql"
+import type {
+  GetUserBooksQueryVariables,
+  TypedDocumentString,
+} from "@/api/generated/graphql"
 import {
-  GetUserCurrentBooksDocument,
-  type GetUserCurrentBooksQuery,
+  GetUserBooksDocument,
+  type GetUserBooksQuery,
   UpdateUserBookReadDocument,
   type UpdateUserBookReadMutation,
   type UpdateUserBookReadMutationVariables,
-} from "@/api/client/graphql"
+} from "@/api/generated/graphql"
+import { BookStatus } from "./types"
 
 interface GraphQLError {
   message: string
@@ -66,8 +70,14 @@ export class HardcoverClient {
     }
   }
 
-  async getUserCurrentBooks(): Promise<GetUserCurrentBooksQuery> {
-    return this.query(GetUserCurrentBooksDocument)
+  async getUserBooks(
+    limit: number,
+    statusId: BookStatus,
+  ): Promise<GetUserBooksQuery> {
+    return this.query(GetUserBooksDocument, {
+      limit,
+      statusId,
+    } satisfies GetUserBooksQueryVariables)
   }
 
   async updateReadingProgress(

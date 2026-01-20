@@ -1,5 +1,6 @@
 import { Progress } from "@ui/Progress"
 import * as React from "react"
+import { BOOK_STATUS } from "@/constants"
 import type { UserBook } from "@/types"
 
 interface BookProps {
@@ -26,13 +27,14 @@ export const Book: React.FC<BookProps> = ({ userBook }) => {
         </div>
       )}
 
-      {latestRead?.edition?.id && (
-        <Progress
-          editionId={latestRead.edition.id}
-          readingSession={latestRead}
-          totalPages={totalPages}
-        />
-      )}
+      {latestRead?.edition?.id &&
+        latestRead.user_book?.status_id === BOOK_STATUS.READING && (
+          <Progress
+            editionId={latestRead.edition.id}
+            readingSession={latestRead}
+            totalPages={totalPages}
+          />
+        )}
     </div>
   )
 }

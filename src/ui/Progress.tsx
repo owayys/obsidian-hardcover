@@ -1,6 +1,6 @@
 // biome-ignore-all lint/a11y/noStaticElementInteractions lint/a11y/noNoninteractiveTabindex: need interactive div
 
-import { useUpdateReadingProgress } from "@hooks/progress"
+import { useUpdateReadingProgress } from "@hooks/books"
 import { Notice } from "obsidian"
 import * as React from "react"
 import type { ReadingSession } from "@/types"

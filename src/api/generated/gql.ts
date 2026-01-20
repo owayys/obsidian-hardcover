@@ -15,18 +15,18 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        pages\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress\n        edition {\n          id\n          pages\n          image {\n            url\n          }\n        }\n      }\n    }\n  }\n}": typeof types.GetUserCurrentBooksDocument,
+    "query GetUserBooks($limit: Int!, $statusId: Int!) {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        pages\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress\n        edition {\n          id\n          pages\n          image {\n            url\n          }\n        }\n        user_book {\n          status_id\n        }\n      }\n    }\n  }\n}": typeof types.GetUserBooksDocument,
     "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    user_book_read {\n      progress\n      progress_pages\n      edition_id\n    }\n  }\n}": typeof types.UpdateUserBookReadDocument,
 };
 const documents: Documents = {
-    "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        pages\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress\n        edition {\n          id\n          pages\n          image {\n            url\n          }\n        }\n      }\n    }\n  }\n}": types.GetUserCurrentBooksDocument,
+    "query GetUserBooks($limit: Int!, $statusId: Int!) {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        pages\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress\n        edition {\n          id\n          pages\n          image {\n            url\n          }\n        }\n        user_book {\n          status_id\n        }\n      }\n    }\n  }\n}": types.GetUserBooksDocument,
     "mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {\n  update_user_book_read(id: $id, object: $object) {\n    user_book_read {\n      progress\n      progress_pages\n      edition_id\n    }\n  }\n}": types.UpdateUserBookReadDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query GetUserCurrentBooks {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: 2}}}) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        pages\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress\n        edition {\n          id\n          pages\n          image {\n            url\n          }\n        }\n      }\n    }\n  }\n}"): typeof import('./graphql').GetUserCurrentBooksDocument;
+export function graphql(source: "query GetUserBooks($limit: Int!, $statusId: Int!) {\n  me {\n    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {\n      book {\n        image {\n          url\n        }\n        id\n        title\n        pages\n      }\n      user_book_reads {\n        id\n        progress_pages\n        progress\n        edition {\n          id\n          pages\n          image {\n            url\n          }\n        }\n        user_book {\n          status_id\n        }\n      }\n    }\n  }\n}"): typeof import('./graphql').GetUserBooksDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
