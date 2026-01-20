@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getHardcoverClient } from "./client"
 import { queryKeys } from "./queryKeys"
 
-export const useCurrentBooks = () => {
+export interface CurrentBooksParams {
+  limit: number
+}
+
+export const useCurrentBooks = ({ limit }: CurrentBooksParams) => {
   return useQuery({
     queryKey: queryKeys.currentBooks(),
     queryFn: async () => {
@@ -10,7 +14,7 @@ export const useCurrentBooks = () => {
       if (!hardcoverClient) {
         throw new Error("Hardcover client not initialized")
       }
-      const result = await hardcoverClient.getUserCurrentBooks()
+      const result = await hardcoverClient.getUserCurrentBooks(limit)
       return result.me?.[0]?.user_books ?? []
     },
     staleTime: 5 * 60 * 1000,

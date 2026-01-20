@@ -1,12 +1,14 @@
 import { useCurrentBooks } from "@hooks/progress"
 import { Book } from "@ui/Book"
 import * as React from "react"
+import { HardcoverParams } from "@/main"
 
 interface BookListProps {
   className?: string
+  params: HardcoverParams
 }
 
-export const BookList: React.FC<BookListProps> = ({ className }) => {
+export const BookList: React.FC<BookListProps> = ({ className, params }) => {
   const {
     data: userBooks = [],
     isLoading,
@@ -14,7 +16,9 @@ export const BookList: React.FC<BookListProps> = ({ className }) => {
     error,
     refetch,
     isRefetching,
-  } = useCurrentBooks()
+  } = useCurrentBooks({
+    limit: params.limit,
+  })
 
   const onRefetch = async () => {
     await refetch()

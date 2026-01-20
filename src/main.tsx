@@ -1,4 +1,4 @@
-import { Notice, Plugin } from "obsidian"
+import { MarkdownRenderChild, Notice, Plugin } from "obsidian"
 import "react"
 import { initializeHardcoverClient } from "@hooks/client"
 import { BookList } from "@ui/BookList"
@@ -11,6 +11,14 @@ import {
   PluginSettings,
 } from "@/settings"
 import { TOKEN_KEY } from "./constants"
+
+export interface HardcoverParams {
+  limit: number
+}
+
+const DEFAULT_PARAMS: HardcoverParams = {
+  limit: 10,
+}
 
 export default class HardcoverPlugin extends Plugin {
   settings: PluginSettings
@@ -35,7 +43,15 @@ export default class HardcoverPlugin extends Plugin {
 
     this.registerMarkdownCodeBlockProcessor(
       "hardcover",
-      async (_source, el, ctx) => {
+      async (src, el, ctx) => {
+        let userParams: Partial<HardcoverParams> = {}
+        try {
+          userParams = JSON.parse(src)
+        } catch (error) {
+          console.error("Invalid JSON in code block", error)
+        }
+        const params: HardcoverParams = { ...DEFAULT_PARAMS, ...userParams }
+
         if (!this.hardcoverClient) {
           new Notice("Hardcover API token not configured")
           return
@@ -48,7 +64,7 @@ export default class HardcoverPlugin extends Plugin {
         const root = createRoot(container)
         root.render(
           <HardcoverQueryProvider>
-            <BookList />
+            <BookList params={params} />
           </HardcoverQueryProvider>,
         )
 
@@ -57,6 +73,8 @@ export default class HardcoverPlugin extends Plugin {
         ctx.addChild({
           containerEl: el,
           load: () => {},
+          onload: () => {},
+          onunload: () => {},
           unload: () => {
             const root = this.roots.get(el)
             if (root) {
@@ -64,14 +82,13 @@ export default class HardcoverPlugin extends Plugin {
               this.roots.delete(el)
             }
           },
-          addChild: (child: any) => child,
-          removeChild: (child: any) => child,
-          register: (event: any) => event,
-          registerEvent: (event: any) => event,
-          registerInterval: (interval: any) => interval,
-          unregister: (event: any) => event,
-          unregisterAll: () => {},
-        } as any)
+          addChild: (child) => child,
+          removeChild: (child) => child,
+          register: (event) => event,
+          registerEvent: (event) => event,
+          registerDomEvent: () => {},
+          registerInterval: (interval) => interval,
+        } satisfies MarkdownRenderChild)
       },
     )
 
