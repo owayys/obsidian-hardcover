@@ -1,3 +1,5 @@
+import svelte from "rollup-plugin-svelte"
+import sveltePreprocess from "svelte-preprocess"
 import { defineConfig } from "tsdown"
 
 const banner = `/*
@@ -6,7 +8,7 @@ if you want to view the source, please visit the github repository of this plugi
 */`
 
 export default defineConfig({
-  entry: "src/main.tsx", // Use string, not object, for single output
+  entry: "src/main.ts",
   outDir: ".",
   outExtensions() {
     return { js: ".js" }
@@ -19,6 +21,14 @@ export default defineConfig({
   banner: {
     js: banner,
   },
+  plugins: [
+    svelte({
+      preprocess: sveltePreprocess(),
+      compilerOptions: {
+        css: "injected",
+      },
+    }),
+  ],
   external: [
     "obsidian",
     "electron",
@@ -34,14 +44,7 @@ export default defineConfig({
     "@lezer/highlight",
     "@lezer/lr",
   ],
-  noExternal: [
-    "react",
-    "react-dom",
-    "react/jsx-runtime",
-    "react-dom/client",
-    "@tanstack/react-query",
-    "@tanstack/react-query-devtools",
-  ],
+  noExternal: ["@stores/*", "@ui/*", "@hooks/*", "@api/*"],
   treeshake: true,
   clean: false,
   dts: false,
