@@ -154,6 +154,10 @@ If your plugin does not need CSS, delete this file.
   color: var(--text-muted);
 }
 
+.hardcover-error {
+  width: 100%;
+}
+
 .hardcover-error-container {
   padding: 32px 16px;
   color: var(--text-error);

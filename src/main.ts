@@ -7,6 +7,7 @@ import {
   HardcoverSettingTab,
   PluginSettings,
 } from "@/settings"
+import ConfigError from "@/ui/ConfigError.svelte"
 import { TOKEN_KEY } from "./constants"
 import { BookStatusKey } from "./types"
 
@@ -27,6 +28,8 @@ export default class HardcoverPlugin extends Plugin {
   onunload(): void {}
 
   async onload() {
+    console.log(`[${this.manifest.name}] Loading plugin`)
+
     await this.loadSettings()
 
     const apiToken = this.app.secretStorage.getSecret(TOKEN_KEY)
@@ -51,6 +54,12 @@ export default class HardcoverPlugin extends Plugin {
 
         if (!this.hardcoverClient) {
           new Notice("Hardcover API token not configured")
+          new ConfigError({
+            target: el,
+            props: {
+              error: new Error("Hardcover API token not configured"),
+            },
+          })
           return
         }
 
@@ -62,8 +71,13 @@ export default class HardcoverPlugin extends Plugin {
             },
           })
         } catch (error) {
-          console.error("Failed to create BookList component:", error)
           new Notice("Failed to load book list component")
+          new ConfigError({
+            target: el,
+            props: {
+              error,
+            },
+          })
         }
       },
     )
