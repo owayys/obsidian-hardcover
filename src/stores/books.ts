@@ -1,6 +1,6 @@
-import { getHardcoverClient } from "@hooks/client"
 import { writable } from "svelte/store"
 import { BOOK_STATUS } from "@/constants"
+import { getHardcoverClient } from "@/stores/factory"
 import type { UserBook } from "@/types"
 import { createQueryStore, type QueryStore } from "./queryStore"
 

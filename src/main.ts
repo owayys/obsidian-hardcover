@@ -1,4 +1,3 @@
-import { initializeHardcoverClient } from "@hooks/client"
 import BookList from "@ui/BookList.svelte"
 import { Notice, Plugin } from "obsidian"
 import { HardcoverClient } from "@/client"
@@ -7,6 +6,7 @@ import {
   HardcoverSettingTab,
   PluginSettings,
 } from "@/settings"
+import { initializeHardcoverClient } from "@/stores/factory"
 import ConfigError from "@/ui/ConfigError.svelte"
 import { TOKEN_KEY } from "./constants"
 import { BookStatusKey } from "./types"
