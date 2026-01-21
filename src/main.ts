@@ -1,15 +1,13 @@
-import { MarkdownRenderChild, Notice, Plugin } from "obsidian"
-import "react"
-import { initializeHardcoverClient } from "@hooks/client"
-import { BookList } from "@ui/BookList"
-import { HardcoverQueryProvider } from "@ui/QueryProvider"
-import { createRoot, Root } from "react-dom/client"
+import BookList from "@ui/BookList.svelte"
+import { Notice, Plugin } from "obsidian"
 import { HardcoverClient } from "@/client"
 import {
   DEFAULT_SETTINGS,
   HardcoverSettingTab,
   PluginSettings,
 } from "@/settings"
+import { initializeHardcoverClient } from "@/stores/factory"
+import ConfigError from "@/ui/ConfigError.svelte"
 import { TOKEN_KEY } from "./constants"
 import { BookStatusKey } from "./types"
 
@@ -26,16 +24,12 @@ const DEFAULT_PARAMS: HardcoverParams = {
 export default class HardcoverPlugin extends Plugin {
   settings: PluginSettings
   hardcoverClient: HardcoverClient | null = null
-  private roots: Map<HTMLElement, Root> = new Map()
 
-  onunload(): void {
-    this.roots.forEach((root) => {
-      root.unmount()
-    })
-    this.roots.clear()
-  }
+  onunload(): void {}
 
   async onload() {
+    console.log(`[${this.manifest.name}] Loading plugin`)
+
     await this.loadSettings()
 
     const apiToken = this.app.secretStorage.getSecret(TOKEN_KEY)
@@ -46,58 +40,45 @@ export default class HardcoverPlugin extends Plugin {
 
     this.registerMarkdownCodeBlockProcessor(
       "hardcover",
-      async (src, el, ctx) => {
+      async (src, el, _ctx) => {
         let userParams: Partial<HardcoverParams> = {}
         try {
           userParams = JSON.parse(src)
         } catch (error) {
           console.error("Invalid JSON in code block", error)
         }
-        const params: HardcoverParams = { ...DEFAULT_PARAMS, ...userParams }
+        const params: HardcoverParams = {
+          ...DEFAULT_PARAMS,
+          ...userParams,
+        }
 
         if (!this.hardcoverClient) {
           new Notice("Hardcover API token not configured")
+          new ConfigError({
+            target: el,
+            props: {
+              error: new Error("Hardcover API token not configured"),
+            },
+          })
           return
         }
 
-        const existingRoot = this.roots.get(el)
-        if (existingRoot) {
-          existingRoot.unmount()
-          this.roots.delete(el)
+        try {
+          new BookList({
+            target: el,
+            props: {
+              params,
+            },
+          })
+        } catch (error) {
+          new Notice("Failed to load book list component")
+          new ConfigError({
+            target: el,
+            props: {
+              error,
+            },
+          })
         }
-
-        el.empty()
-
-        const container = el.createDiv({ cls: "hardcover-books" })
-
-        const root = createRoot(container)
-        root.render(
-          <HardcoverQueryProvider>
-            <BookList params={params} />
-          </HardcoverQueryProvider>,
-        )
-
-        this.roots.set(el, root)
-
-        ctx.addChild({
-          containerEl: el,
-          load: () => {},
-          onload: () => {},
-          onunload: () => {},
-          unload: () => {
-            const root = this.roots.get(el)
-            if (root) {
-              root.unmount()
-              this.roots.delete(el)
-            }
-          },
-          addChild: (child) => child,
-          removeChild: (child) => child,
-          register: (event) => event,
-          registerEvent: (event) => event,
-          registerDomEvent: () => {},
-          registerInterval: (interval) => interval,
-        } satisfies MarkdownRenderChild)
       },
     )
 
