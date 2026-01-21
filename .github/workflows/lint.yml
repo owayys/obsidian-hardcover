@@ -1,4 +1,4 @@
-name: Bun build
+name: Lint
 on:
     push:
         branches: ["**"]
