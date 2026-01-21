@@ -10,7 +10,7 @@ import {
   type UpdateUserBookReadMutation,
   type UpdateUserBookReadMutationVariables,
 } from "@/api/generated/graphql"
-import { BookStatus } from "./types"
+import { BookStatus } from "@/types"
 
 interface GraphQLError {
   message: string

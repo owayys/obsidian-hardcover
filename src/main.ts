@@ -1,6 +1,6 @@
+import { HardcoverClient } from "@api/client"
 import BookList from "@ui/BookList.svelte"
 import { Notice, Plugin } from "obsidian"
-import { HardcoverClient } from "@/client"
 import {
   DEFAULT_SETTINGS,
   HardcoverSettingTab,
