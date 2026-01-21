@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "inlineSourceMap": true,
-    "inlineSources": true,
     "module": "ESNext",
     "target": "ES6",
     "allowJs": true,
@@ -21,7 +19,8 @@
       "@/*": ["./src/*"],
       "@ui/*": ["./src/ui/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@api/*": ["./src/api/*"]
+      "@api/*": ["./src/api/*"],
+      "@stores/*": ["./src/stores/*"]
     },
     "plugins": [
       {
@@ -30,7 +29,8 @@
       }
     ],
     "jsx": "react-jsx",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["svelte"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.svelte"]
 }
