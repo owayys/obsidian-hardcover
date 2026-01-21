@@ -33,6 +33,17 @@
         }
       }
     },
+    "Svelte": {
+      "language_servers": ["svelte"],
+      "code_actions_on_format": {
+        "source.fixAll.biome": true
+      },
+      "formatter": {
+        "language_server": {
+          "name": "biome"
+        }
+      }
+    },
     "CSS": {
       "code_actions_on_format": {
         "source.fixAll.biome": true

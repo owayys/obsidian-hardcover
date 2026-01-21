@@ -8,7 +8,13 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!!**/node_modules", "!!**/dist", "./*.{json,jsonc}"],
+    "includes": [
+      "**",
+      "!!**/node_modules",
+      "!!**/dist",
+      "./*.{json,jsonc}",
+      "!src/api/generated"
+    ],
     "ignoreUnknown": true
   },
   "formatter": {
@@ -54,6 +60,23 @@
     },
     "enabled": true
   },
+  "overrides": [
+    {
+      "includes": ["**/*.svelte", "**/*.astro", "**/*.vue"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    }
+  ],
   "css": {
     "assist": {
       "enabled": true

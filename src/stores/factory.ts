@@ -1,4 +1,4 @@
-import { HardcoverClient } from "@/client"
+import { HardcoverClient } from "@api/client"
 
 let hardcoverClient: HardcoverClient | null = null
 

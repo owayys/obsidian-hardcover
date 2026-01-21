@@ -19598,10 +19598,13 @@ export type Users_Variance_Order_By = {
   status_id?: InputMaybe<Order_By>;
 };
 
-export type GetUserCurrentBooksQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserBooksQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  statusId: Scalars['Int']['input'];
+}>;
 
 
-export type GetUserCurrentBooksQuery = { __typename?: 'query_root', me: Array<{ __typename?: 'users', user_books: Array<{ __typename?: 'user_books', book: { __typename?: 'books', id: number, title?: string | null, pages?: number | null, image?: { __typename?: 'images', url?: string | null } | null }, user_book_reads: Array<{ __typename?: 'user_book_reads', id: number, progress_pages?: number | null, progress?: number | null, edition?: { __typename?: 'editions', id: number, pages?: number | null, image?: { __typename?: 'images', url?: string | null } | null } | null }> }> }> };
+export type GetUserBooksQuery = { __typename?: 'query_root', me: Array<{ __typename?: 'users', user_books: Array<{ __typename?: 'user_books', book: { __typename?: 'books', id: number, title?: string | null, pages?: number | null, image?: { __typename?: 'images', url?: string | null } | null }, user_book_reads: Array<{ __typename?: 'user_book_reads', id: number, progress_pages?: number | null, progress?: number | null, edition?: { __typename?: 'editions', id: number, pages?: number | null, image?: { __typename?: 'images', url?: string | null } | null } | null, user_book?: { __typename?: 'user_books', status_id: number } | null }> }> }> };
 
 export type UpdateUserBookReadMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -19630,10 +19633,10 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
-export const GetUserCurrentBooksDocument = new TypedDocumentString(`
-    query GetUserCurrentBooks {
+export const GetUserBooksDocument = new TypedDocumentString(`
+    query GetUserBooks($limit: Int!, $statusId: Int!) {
   me {
-    user_books(where: {user_book_status: {id: {_eq: 2}}}) {
+    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {
       book {
         image {
           url
@@ -19653,11 +19656,14 @@ export const GetUserCurrentBooksDocument = new TypedDocumentString(`
             url
           }
         }
+        user_book {
+          status_id
+        }
       }
     }
   }
 }
-    `) as unknown as TypedDocumentString<GetUserCurrentBooksQuery, GetUserCurrentBooksQueryVariables>;
+    `) as unknown as TypedDocumentString<GetUserBooksQuery, GetUserBooksQueryVariables>;
 export const UpdateUserBookReadDocument = new TypedDocumentString(`
     mutation UpdateUserBookRead($id: Int!, $object: DatesReadInput!) {
   update_user_book_read(id: $id, object: $object) {

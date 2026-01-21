@@ -1,6 +1,6 @@
-query GetUserCurrentBooks {
+query GetUserBooks($limit: Int!, $statusId: Int!) {
   me {
-    user_books(where: {user_book_status: {id: {_eq: 2}}}) {
+    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {
       book {
         image {
           url
@@ -19,6 +19,9 @@ query GetUserCurrentBooks {
           image {
             url
           }
+        }
+        user_book {
+          status_id
         }
       }
     }
