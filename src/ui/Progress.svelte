@@ -2,6 +2,7 @@
   import type { createUpdateProgressStore } from "@stores/books"
   import { Notice } from "obsidian"
   import { onDestroy, onMount } from "svelte"
+  import { DEBOUNCE_MS } from "@/constants"
   import type { ReadingSession } from "@/types"
 
   export let readingSession: ReadingSession
@@ -13,8 +14,19 @@
   let showPercentage = false
   const debounceTimers = new Map<number, number>()
 
-  $: pages = readingSession?.progress_pages ?? 0
-  $: percentage = readingSession?.progress ?? 0
+  let localProgress = {
+    pages: readingSession?.progress_pages ?? 0,
+    percentage: readingSession?.progress ?? 0,
+  }
+
+  $: {
+    if (readingSession && !isLoading) {
+      localProgress = {
+        pages: readingSession.progress_pages ?? 0,
+        percentage: readingSession.progress ?? 0,
+      }
+    }
+  }
 
   onMount(() => {
     const unsubscribe = updateProgressStore.subscribe(
@@ -22,7 +34,6 @@
         isLoading = state.isLoading
       },
     )
-
     return unsubscribe
   })
 
@@ -33,7 +44,7 @@
     debounceTimers.clear()
   })
 
-  function debouncedUpdate(fn: () => Promise<void>, delayMs = 500) {
+  function debouncedUpdate(fn: () => Promise<void>, delayMs = DEBOUNCE_MS) {
     const sessionId = readingSession?.id
     if (!sessionId) return
 
@@ -43,20 +54,31 @@
     }
 
     const newTimer = window.setTimeout(async () => {
+      isLoading = true
       try {
         await fn()
       } catch (error) {
         console.error("Failed to update progress:", error)
         new Notice("Failed to update reading progress")
+      } finally {
+        isLoading = false
+        debounceTimers.delete(sessionId)
       }
-      debounceTimers.delete(sessionId)
     }, delayMs)
 
     debounceTimers.set(sessionId, newTimer)
   }
 
   function handleIncrementPages() {
-    const newPages = pages + 1
+    const newPages = localProgress.pages + 1
+    const newPercentage = totalPages
+      ? Math.round((newPages / totalPages) * 100)
+      : localProgress.percentage
+
+    localProgress = {
+      pages: newPages,
+      percentage: newPercentage,
+    }
 
     debouncedUpdate(async () => {
       await updateProgressStore.updateReadingProgress(
@@ -68,9 +90,16 @@
   }
 
   function handleDecrementPages() {
-    if (pages <= 0) return
+    if (localProgress.pages <= 0) return
+    const newPages = localProgress.pages - 1
+    const newPercentage = totalPages
+      ? Math.round((newPages / totalPages) * 100)
+      : localProgress.percentage
 
-    const newPages = pages - 1
+    localProgress = {
+      pages: newPages,
+      percentage: newPercentage,
+    }
 
     debouncedUpdate(async () => {
       await updateProgressStore.updateReadingProgress(
@@ -93,21 +122,20 @@
   }
 
   $: progressText = showPercentage
-    ? `${percentage.toFixed(0)}%`
+    ? `${localProgress.percentage.toFixed(0)}%`
     : totalPages
-      ? `${pages}/${totalPages}`
-      : `${pages} pages`
+      ? `${localProgress.pages}/${totalPages}`
+      : `${localProgress.pages} pages`
 </script>
 
 <div class="hardcover-progress">
   <button
     aria-label="Decrement pages"
-    disabled={isLoading || pages <= 0}
+    disabled={isLoading || localProgress.pages <= 0}
     on:click={handleDecrementPages}
     type="button">
     −
   </button>
-
   <div
     class="hardcover-progress-text"
     on:click={toggleDisplay}
@@ -116,7 +144,6 @@
     role="button">
     {progressText}
   </div>
-
   <button
     aria-label="Increment pages"
     disabled={isLoading}

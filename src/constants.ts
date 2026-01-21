@@ -17,3 +17,5 @@ export const BOOK_STATUS_LABELS = {
   [BOOK_STATUS.DNF]: "did not finish reading",
   [BOOK_STATUS.IGNORED]: "have ignored",
 } as const
+
+export const DEBOUNCE_MS = 1000
