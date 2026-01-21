@@ -8,7 +8,13 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!!**/node_modules", "!!**/dist", "./*.{json,jsonc}"],
+    "includes": [
+      "**",
+      "!!**/node_modules",
+      "!!**/dist",
+      "./*.{json,jsonc}",
+      "!src/api/generated"
+    ],
     "ignoreUnknown": true
   },
   "formatter": {
