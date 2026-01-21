@@ -1,17 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte"
   import {
-    userBooksStore,
-    userBooks,
-    isLoading,
-    error,
-    isRefetching,
+    createUpdateProgressStore,
+    createUserBooksStore,
   } from "@stores/books"
   import Book from "@ui/Book.svelte"
-  import { UserBook } from "@/types"
+  import { onDestroy } from "svelte"
   import { HardcoverParams } from "@/main"
+  import { UserBook } from "@/types"
 
-  export let className: string | undefined = undefined
+  export let className: string = ""
   export let params: HardcoverParams
 
   let userBooksData: UserBook[] = []
@@ -19,32 +16,26 @@
   let errorData: Error | null = null
   let refetchingData = false
 
-  onMount(() => {
-    userBooksStore.fetchUserBooks(params.limit, params.status)
+  const userBooksStore = createUserBooksStore(params.limit, params.status)
+  userBooksStore.fetch()
 
-    const unsubscribeUserBooks = userBooks.subscribe((value) => {
-      userBooksData = Array.isArray(value) ? value : []
-    })
-    const unsubscribeLoading = isLoading.subscribe((value) => {
-      loadingData = Boolean(value)
-    })
-    const unsubscribeError = error.subscribe((value) => {
-      errorData = value
-    })
-    const unsubscribeRefetching = isRefetching.subscribe((value) => {
-      refetchingData = Boolean(value)
-    })
+  const updateProgressStore = createUpdateProgressStore(() =>
+    userBooksStore.refetch(),
+  )
 
-    return () => {
-      unsubscribeUserBooks()
-      unsubscribeLoading()
-      unsubscribeError()
-      unsubscribeRefetching()
-    }
+  const unsubscribe = userBooksStore.subscribe((state) => {
+    userBooksData = state.data ?? []
+    loadingData = state.isLoading
+    errorData = state.error
+    refetchingData = state.isRefetching
+  })
+
+  onDestroy(() => {
+    unsubscribe()
   })
 
   async function onRefetch() {
-    await userBooksStore.refetchUserBooks(params.limit, params.status)
+    await userBooksStore.refetch()
   }
 </script>
 
@@ -86,7 +77,7 @@
         {#each userBooksData as userBook (userBook?.book?.id || Math.random())}
             {@const bookId = userBook?.book?.id}
             {#if bookId}
-                <Book {userBook} />
+                <Book {userBook} {updateProgressStore} />
             {/if}
         {/each}
         <button

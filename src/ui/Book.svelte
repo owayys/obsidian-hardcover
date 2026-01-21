@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { BOOK_STATUS } from "@/constants"
+  import type { createUpdateProgressStore } from "@stores/books"
+  import BookCover from "@ui/BookCover.svelte"
   import Progress from "@ui/Progress.svelte"
+  import { BOOK_STATUS } from "@/constants"
   import type { UserBook } from "@/types"
 
   export let userBook: UserBook
+  export let updateProgressStore: ReturnType<typeof createUpdateProgressStore>
 
   $: latestRead = userBook?.user_book_reads?.[0] || null
   $: totalPages =
@@ -16,20 +19,14 @@
 
 <div class="hardcover-book">
     {#if coverUrl}
-        <div class="hardcover-book-cover">
-            <img
-                alt={userBook?.book?.title ?? "Book cover"}
-                loading="lazy"
-                src={coverUrl}
-                title={userBook?.book?.title ?? "Book cover"}
-            />
-        </div>
+        <BookCover {userBook} {coverUrl} />
     {/if}
     {#if shouldShowProgress && latestRead?.edition?.id}
         <Progress
             editionId={latestRead.edition.id}
             readingSession={latestRead}
             {totalPages}
+            {updateProgressStore}
         />
     {/if}
 </div>

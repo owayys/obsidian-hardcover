@@ -43,13 +43,46 @@ If your plugin does not need CSS, delete this file.
   text-align: center;
 }
 
-.hardcover-book-cover img {
+.hardcover-book-cover {
+  position: relative;
   width: 100%;
   max-width: 120px;
   aspect-ratio: 2 / 3;
+}
+
+.hardcover-book-cover img {
   object-fit: cover;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hardcover-cover-skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background-secondary);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hardcover-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--background-secondary);
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hardcover-cover-placeholder-icon {
+  font-size: 2em;
+  opacity: 0.5;
 }
 
 .hardcover-progress {
@@ -85,6 +118,18 @@ If your plugin does not need CSS, delete this file.
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* Pulsating skeleton animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
   }
 }
 
