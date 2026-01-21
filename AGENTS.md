@@ -1,57 +1,89 @@
-# Obsidian community plugin
+# Obsidian Hardcover Plugin
 
 ## Project overview
 
 - Target: Obsidian Community Plugin (TypeScript → bundled JavaScript).
-- Entry point: `main.ts` compiled to `main.js` and loaded by Obsidian.
+- Entry point: `src/main.tsx` compiled to `main.js` and loaded by Obsidian.
 - Required release artifacts: `main.js`, `manifest.json`, and optional `styles.css`.
+- Purpose: Hardcover.app integration for displaying reading progress and book data in Obsidian.
 
 ## Environment & tooling
 
 - Node.js: use current LTS (Node 18+ recommended).
-- **Package manager: npm** (required for this sample - `package.json` defines npm scripts and dependencies).
-- **Bundler: esbuild** (required for this sample - `esbuild.config.mjs` and build scripts depend on it). Alternative bundlers like Rollup or webpack are acceptable for other projects if they bundle all external dependencies into `main.js`.
-- Types: `obsidian` type definitions.
-
-**Note**: This sample project has specific technical dependencies on npm and esbuild. If you're creating a plugin from scratch, you can choose different tools, but you'll need to replace the build configuration accordingly.
+- **Package manager: bun** (package.json defines npm scripts and dependencies).
+- **Bundler: tsdown** (tsdown.config.ts handles bundling with React support).
+- **Linting/Formatting: Biome** (biome.jsonc configuration).
+- **Code generation: GraphQL Code Generator** (codegen.ts for API types).
+- **TypeScript**: Strict configuration with GraphQL SP for type-safe GraphQL operations.
+- **React**: v19.2.3 with React DOM for UI components.
+- **State Management**: TanStack Query v5.90.18 for server state and caching.
+- **GraphQL**: v16.12.0 for API communication with Hardcover.app.
+- Types: `obsidian` type definitions with strict TypeScript configuration.
 
 ### Install
 
 ```bash
-npm install
+bun install
 ```
 
 ### Dev (watch)
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 ### Production build
 
 ```bash
-npm run build
+bun run build
+```
+
+### Lint
+
+```bash
+bun run lint
+```
+
+### Code generation
+
+```bash
+bun run codegen
+```
+
+### Version bump
+
+```bash
+bun run version
 ```
 
 ## File & folder conventions
 
 - **Organize code into multiple files**: Split functionality across separate modules rather than putting everything in `main.ts`.
 - Source lives in `src/`. Keep `main.ts` small and focused on plugin lifecycle (loading, unloading, registering commands).
-- **Example file structure**:
+- **Current file structure**:
   ```
   src/
-    main.ts           # Plugin entry point, lifecycle management
+    main.tsx           # Plugin entry point, lifecycle management
     settings.ts       # Settings interface and defaults
-    commands/         # Command implementations
-      command1.ts
-      command2.ts
-    ui/              # UI components, modals, views
-      modal.ts
-      view.ts
-    utils/           # Utility functions, helpers
-      helpers.ts
-      constants.ts
-    types.ts         # TypeScript interfaces and types
+    api/              # GraphQL API client and types
+      generated/      # Auto-generated GraphQL types
+      operations/    # GraphQL queries/mutations
+      schema.graphql # GraphQL schema
+      hooks.ts       # TanStack Query hooks
+      queryKeys.ts   # Query key structure
+      client.ts      # API client
+    ui/              # React components
+      Book.tsx       # Individual book component
+      BookList.tsx   # Main book list container
+      Progress.tsx   # Reading progress component
+      QueryProvider.tsx # React Query provider
+      constants.ts   # UI constants
+      types.ts       # Component types
+    hooks/           # Custom React hooks
+      books.ts       # Book-related hooks
+      client.ts      # Client initialization
+    constants.ts     # App-wide constants
+    types.ts         # TypeScript interfaces
   ```
 - **Do not commit build artifacts**: Never commit `node_modules/`, `main.js`, or other generated files to version control.
 - Keep the plugin small. Avoid large dependencies. Prefer browser-compatible packages.
@@ -124,7 +156,7 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 ## Coding conventions
 
 - TypeScript with `"strict": true` preferred.
-- **Keep `main.ts` minimal**: Focus only on plugin lifecycle (onload, onunload, addCommand calls). Delegate all feature logic to separate modules.
+- **Keep `main.tsx` minimal**: Focus only on plugin lifecycle (onload, onunload, addCommand calls). Delegate all feature logic to separate modules.
 - **Split large files**: If any file exceeds ~200-300 lines, consider breaking it into smaller, focused modules.
 - **Use clear module boundaries**: Each file should have a single, well-defined responsibility.
 - Bundle everything into `main.js` (no unbundled runtime deps).
@@ -257,6 +289,45 @@ export default class MyPlugin extends Plugin {
     registerCommands(this);
   }
 }
+```
+
+**main.tsx** (current implementation with React):
+```ts
+import { MarkdownRenderChild, Notice, Plugin } from "obsidian"
+import { initializeHardcoverClient } from "@hooks/client"
+import { BookList } from "@ui/BookList"
+import { HardcoverQueryProvider } from "@ui/QueryProvider"
+import { createRoot, Root } from "react-dom/client"
+import { HardcoverClient } from "@/client"
+import { DEFAULT_SETTINGS, HardcoverSettingTab, PluginSettings } from "@/settings"
+
+export default class HardcoverPlugin extends Plugin {
+  settings: PluginSettings
+  hardcoverClient: HardcoverClient | null = null
+  private roots: Map<HTMLElement, Root> = new Map()
+
+  async onload() {
+    await this.loadSettings()
+    // Initialize client and register markdown code block processor
+    this.registerMarkdownCodeBlockProcessor("hardcover", async (src, el, ctx) => {
+      // React rendering logic
+    })
+    this.addSettingTab(new HardcoverSettingTab(this.app, this))
+  }
+}
+```
+
+**settings.ts**:
+```ts
+export interface MySettings {
+  enabled: boolean;
+  apiKey: string;
+}
+
+export const DEFAULT_SETTINGS: MySettings = {
+  enabled: true,
+  apiKey: "",
+};
 ```
 
 **settings.ts**:
