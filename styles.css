@@ -45,6 +45,8 @@ If your plugin does not need CSS, delete this file.
     );
   gap: var(--hc-spacing-md);
   padding: var(--hc-spacing-sm);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--hc-size-border-radius-md);
 }
 
 .hardcover-book-list button {
