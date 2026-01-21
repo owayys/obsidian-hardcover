@@ -1,40 +1,43 @@
 <script lang="ts">
-import { createUpdateProgressStore, createUserBooksStore } from "@stores/books"
-import Book from "@ui/Book.svelte"
-import { onDestroy } from "svelte"
-import { BOOK_STATUS, BOOK_STATUS_LABELS } from "@/constants"
-import { HardcoverParams } from "@/main"
-import { UserBook } from "@/types"
+  import {
+    createUpdateProgressStore,
+    createUserBooksStore,
+  } from "@stores/books"
+  import Book from "@ui/Book.svelte"
+  import { onDestroy } from "svelte"
+  import { BOOK_STATUS, BOOK_STATUS_LABELS } from "@/constants"
+  import { HardcoverParams } from "@/main"
+  import { UserBook } from "@/types"
 
-export let className: string = ""
-export let params: HardcoverParams
+  export let className: string = ""
+  export let params: HardcoverParams
 
-let userBooksData: UserBook[] = []
-let loadingData = true
-let errorData: Error | null = null
-let refetchingData = false
+  let userBooksData: UserBook[] = []
+  let loadingData = true
+  let errorData: Error | null = null
+  let refetchingData = false
 
-const userBooksStore = createUserBooksStore(params.limit, params.status)
-userBooksStore.fetch()
+  const userBooksStore = createUserBooksStore(params.limit, params.status)
+  userBooksStore.fetch()
 
-const updateProgressStore = createUpdateProgressStore(() =>
-  userBooksStore.refetch(),
-)
+  const updateProgressStore = createUpdateProgressStore(() =>
+    userBooksStore.refetch(),
+  )
 
-const unsubscribe = userBooksStore.subscribe((state) => {
-  userBooksData = state.data ?? []
-  loadingData = state.isLoading
-  errorData = state.error
-  refetchingData = state.isRefetching
-})
+  const unsubscribe = userBooksStore.subscribe((state) => {
+    userBooksData = state.data ?? []
+    loadingData = state.isLoading
+    errorData = state.error
+    refetchingData = state.isRefetching
+  })
 
-onDestroy(() => {
-  unsubscribe()
-})
+  onDestroy(() => {
+    unsubscribe()
+  })
 
-async function onRefetch() {
-  await userBooksStore.refetch()
-}
+  async function onRefetch() {
+    await userBooksStore.refetch()
+  }
 </script>
 
 {#if loadingData}

@@ -1,5 +1,6 @@
 {
   "name": "obsidian-hardcover",
+  "type": "module",
   "version": "1.0.0",
   "description": "This is a hardcover.app plugin for Obsidian (https://obsidian.md)",
   "main": "main.js",
