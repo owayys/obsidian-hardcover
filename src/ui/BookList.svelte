@@ -50,7 +50,7 @@
 {:else if errorData}
     <div class={`hardcover-error ${className || ""}`}>
         <div class="hardcover-error-container">
-            <div class="hardcover-error-title">❌ Failed to load books</div>
+            <div class="hardcover-error-title">Failed to load books</div>
             <div class="hardcover-error-message">
                 {errorData?.message || "Unknown error occurred"}
             </div>
