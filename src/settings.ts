@@ -1,13 +1,12 @@
 import { App, PluginSettingTab, SecretComponent, Setting } from "obsidian"
-import { TOKEN_KEY } from "@/constants"
 import HardcoverPlugin from "@/main"
 
 export type PluginSettings = {
-  [TOKEN_KEY]: string
+  TOKEN_SECRET_KEY: string
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
-  [TOKEN_KEY]: "",
+  TOKEN_SECRET_KEY: "",
 }
 
 export class HardcoverSettingTab extends PluginSettingTab {
@@ -32,9 +31,9 @@ export class HardcoverSettingTab extends PluginSettingTab {
       )
       .addComponent((el) =>
         new SecretComponent(this.app, el)
-          .setValue(this.plugin.settings[TOKEN_KEY])
+          .setValue(this.plugin.settings.TOKEN_SECRET_KEY)
           .onChange((value) => {
-            this.plugin.settings[TOKEN_KEY] = value
+            this.plugin.settings.TOKEN_SECRET_KEY = value
             this.plugin.saveSettings()
           }),
       )

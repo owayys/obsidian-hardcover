@@ -8,7 +8,6 @@ import {
 } from "@/settings"
 import { initializeHardcoverClient } from "@/stores/factory"
 import ConfigError from "@/ui/ConfigError.svelte"
-import { TOKEN_KEY } from "./constants"
 import { BookStatusKey } from "./types"
 
 export interface HardcoverParams {
@@ -29,10 +28,11 @@ export default class HardcoverPlugin extends Plugin {
 
   async onload() {
     console.log(`[${this.manifest.name}] Loading plugin`)
-
     await this.loadSettings()
 
-    const apiToken = this.app.secretStorage.getSecret(TOKEN_KEY)
+    const apiToken = this.app.secretStorage.getSecret(
+      this.settings.TOKEN_SECRET_KEY,
+    )
     if (apiToken) {
       this.hardcoverClient = new HardcoverClient(apiToken)
       initializeHardcoverClient(apiToken)
@@ -95,7 +95,9 @@ export default class HardcoverPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings)
-    const apiToken = this.app.secretStorage.getSecret(TOKEN_KEY)
+    const apiToken = this.app.secretStorage.getSecret(
+      this.settings.TOKEN_SECRET_KEY,
+    )
     if (apiToken) {
       this.hardcoverClient = new HardcoverClient(apiToken)
       initializeHardcoverClient(apiToken)

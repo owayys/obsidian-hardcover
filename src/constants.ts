@@ -1,5 +1,3 @@
-export const TOKEN_KEY = "hardcover-token"
-
 export const BOOK_STATUS = {
   TBR: 1,
   READING: 2,
