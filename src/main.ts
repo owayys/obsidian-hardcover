@@ -55,7 +55,6 @@ export default class HardcoverPlugin extends Plugin {
         if (!Object.isEmpty(userParams)) {
           const parsedParams = validateParams(userParams)
           if (!parsedParams) {
-            new Notice("Invalid params")
             new ConfigError({
               target: el,
               props: {
