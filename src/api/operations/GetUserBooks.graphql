@@ -1,6 +1,14 @@
-query GetUserBooks($limit: Int!, $statusId: Int!) {
+query GetUserBooks(
+  $limit: Int!
+  $statusId: Int!
+  $orderBy: [user_books_order_by!]
+) {
   me {
-    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {
+    user_books(
+      where: {user_book_status: {id: {_eq: $statusId}}}
+      limit: $limit
+      order_by: $orderBy
+    ) {
       book {
         image {
           url

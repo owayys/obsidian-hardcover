@@ -13179,6 +13179,7 @@ export type Reading_Formats_Stream_Cursor_Value_Input = {
 /** columns and relationships of "reading_journals" */
 export type Reading_Journals = {
   __typename?: 'reading_journals';
+  action_at: Scalars['timestamptz']['output'];
   /** An object relationship */
   book?: Maybe<Books>;
   book_id?: Maybe<Scalars['Int']['output']>;
@@ -13283,6 +13284,7 @@ export type Reading_Journals_Bool_Exp = {
   _and?: InputMaybe<Array<Reading_Journals_Bool_Exp>>;
   _not?: InputMaybe<Reading_Journals_Bool_Exp>;
   _or?: InputMaybe<Array<Reading_Journals_Bool_Exp>>;
+  action_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   book?: InputMaybe<Books_Bool_Exp>;
   book_id?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamp_Comparison_Exp>;
@@ -13306,6 +13308,7 @@ export type Reading_Journals_Bool_Exp = {
 
 /** order by max() on columns of table "reading_journals" */
 export type Reading_Journals_Max_Order_By = {
+  action_at?: InputMaybe<Order_By>;
   book_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   edition_id?: InputMaybe<Order_By>;
@@ -13321,6 +13324,7 @@ export type Reading_Journals_Max_Order_By = {
 
 /** order by min() on columns of table "reading_journals" */
 export type Reading_Journals_Min_Order_By = {
+  action_at?: InputMaybe<Order_By>;
   book_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   edition_id?: InputMaybe<Order_By>;
@@ -13336,6 +13340,7 @@ export type Reading_Journals_Min_Order_By = {
 
 /** Ordering options when selecting data from "reading_journals". */
 export type Reading_Journals_Order_By = {
+  action_at?: InputMaybe<Order_By>;
   book?: InputMaybe<Books_Order_By>;
   book_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
@@ -13358,6 +13363,8 @@ export type Reading_Journals_Order_By = {
 
 /** select columns of table "reading_journals" */
 export enum Reading_Journals_Select_Column {
+  /** column name */
+  ActionAt = 'action_at',
   /** column name */
   BookId = 'book_id',
   /** column name */
@@ -13424,6 +13431,7 @@ export type Reading_Journals_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Reading_Journals_Stream_Cursor_Value_Input = {
+  action_at?: InputMaybe<Scalars['timestamptz']['input']>;
   book_id?: InputMaybe<Scalars['Int']['input']>;
   created_at?: InputMaybe<Scalars['timestamp']['input']>;
   edition_id?: InputMaybe<Scalars['Int']['input']>;
@@ -19601,6 +19609,7 @@ export type Users_Variance_Order_By = {
 export type GetUserBooksQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   statusId: Scalars['Int']['input'];
+  orderBy?: InputMaybe<Array<User_Books_Order_By> | User_Books_Order_By>;
 }>;
 
 
@@ -19634,9 +19643,13 @@ export class TypedDocumentString<TResult, TVariables>
 }
 
 export const GetUserBooksDocument = new TypedDocumentString(`
-    query GetUserBooks($limit: Int!, $statusId: Int!) {
+    query GetUserBooks($limit: Int!, $statusId: Int!, $orderBy: [user_books_order_by!]) {
   me {
-    user_books(where: {user_book_status: {id: {_eq: $statusId}}}, limit: $limit) {
+    user_books(
+      where: {user_book_status: {id: {_eq: $statusId}}}
+      limit: $limit
+      order_by: $orderBy
+    ) {
       book {
         image {
           url
