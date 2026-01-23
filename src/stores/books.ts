@@ -3,12 +3,12 @@ import {
   SortDirection,
   SortType,
 } from "@utils/query"
+import { createQueryStore, type QueryStore } from "@utils/store"
 import { writable } from "svelte/store"
 import { BOOK_STATUS } from "@/constants"
 import { HardcoverParams } from "@/main"
 import { getHardcoverClient } from "@/stores/factory"
 import type { UserBook } from "@/types"
-import { createQueryStore, type QueryStore } from "./queryStore"
 
 export function createUserBooksStore({
   limit,
