@@ -17,7 +17,7 @@
   let errorData: Error | null = null
   let refetchingData = false
 
-  const userBooksStore = createUserBooksStore(params.limit, params.status)
+  const userBooksStore = createUserBooksStore(params)
   userBooksStore.fetch()
 
   const updateProgressStore = createUpdateProgressStore(() =>
@@ -67,7 +67,7 @@
     <div class={`hardcover-empty ${className || ""}`}>
         <div class="hardcover-empty-container">
             <div class="hardcover-empty-icon">📚</div>
-            <div class="hardcover-empty-title">No books you {BOOK_STATUS_LABELS[BOOK_STATUS[params.status]]}</div>
+            <div class="hardcover-empty-title">No books matching your search, try adjusting your params.</div>
             <div class="hardcover-empty-subtitle">
                 Add your books in Hardcover to see them here
             </div>
