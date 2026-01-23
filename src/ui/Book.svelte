@@ -14,7 +14,7 @@
   $: coverUrl = latestRead?.edition?.image?.url ?? userBook?.book?.image?.url
   $: shouldShowProgress =
     latestRead?.edition?.id &&
-    latestRead?.user_book?.status_id === BOOK_STATUS.READING
+    latestRead?.user_book?.status_id === BOOK_STATUS.reading
 </script>
 
 <div class="hardcover-book">

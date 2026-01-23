@@ -13418,6 +13418,7 @@ input reading_formats_stream_cursor_value_input {
 columns and relationships of "reading_journals"
 """
 type reading_journals {
+  action_at: timestamptz!
   """An object relationship"""
   book: books
   book_id: Int
@@ -13529,6 +13530,7 @@ input reading_journals_bool_exp {
   _and: [reading_journals_bool_exp!]
   _not: reading_journals_bool_exp
   _or: [reading_journals_bool_exp!]
+  action_at: timestamptz_comparison_exp
   book: books_bool_exp
   book_id: Int_comparison_exp
   created_at: timestamp_comparison_exp
@@ -13554,6 +13556,7 @@ input reading_journals_bool_exp {
 order by max() on columns of table "reading_journals"
 """
 input reading_journals_max_order_by {
+  action_at: order_by
   book_id: order_by
   created_at: order_by
   edition_id: order_by
@@ -13571,6 +13574,7 @@ input reading_journals_max_order_by {
 order by min() on columns of table "reading_journals"
 """
 input reading_journals_min_order_by {
+  action_at: order_by
   book_id: order_by
   created_at: order_by
   edition_id: order_by
@@ -13586,6 +13590,7 @@ input reading_journals_min_order_by {
 
 """Ordering options when selecting data from "reading_journals"."""
 input reading_journals_order_by {
+  action_at: order_by
   book: books_order_by
   book_id: order_by
   created_at: order_by
@@ -13610,6 +13615,8 @@ input reading_journals_order_by {
 select columns of table "reading_journals"
 """
 enum reading_journals_select_column {
+  """column name"""
+  action_at
   """column name"""
   book_id
   """column name"""
@@ -13684,6 +13691,7 @@ input reading_journals_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input reading_journals_stream_cursor_value_input {
+  action_at: timestamptz
   book_id: Int
   created_at: timestamp
   edition_id: Int

@@ -1,3 +1,4 @@
+import { BuildUserBooksOrderParams, buildUserBooksOrder } from "@utils/query"
 import { requestUrl } from "obsidian"
 import type {
   GetUserBooksQueryVariables,
@@ -73,10 +74,12 @@ export class HardcoverClient {
   async getUserBooks(
     limit: number,
     statusId: BookStatus,
+    orderBy?: BuildUserBooksOrderParams,
   ): Promise<GetUserBooksQuery> {
     return this.query(GetUserBooksDocument, {
       limit,
       statusId,
+      ...(orderBy && { orderBy: buildUserBooksOrder(orderBy) }),
     } satisfies GetUserBooksQueryVariables)
   }
 
