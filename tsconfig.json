@@ -20,7 +20,8 @@
       "@ui/*": ["./src/ui/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@api/*": ["./src/api/*"],
-      "@stores/*": ["./src/stores/*"]
+      "@stores/*": ["./src/stores/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "plugins": [
       {

@@ -1,5 +1,6 @@
 import { HardcoverClient } from "@api/client"
 import BookList from "@ui/BookList.svelte"
+import { SortDirection, SortType } from "@utils/query"
 import { Notice, Plugin } from "obsidian"
 import {
   DEFAULT_SETTINGS,
@@ -7,17 +8,20 @@ import {
   PluginSettings,
 } from "@/settings"
 import { initializeHardcoverClient } from "@/stores/factory"
+import { BookStatusKey } from "@/types"
 import ConfigError from "@/ui/ConfigError.svelte"
-import { BookStatusKey } from "./types"
+import { validateParams } from "./utils/schema"
 
 export interface HardcoverParams {
   limit: number
   status: BookStatusKey
+  sort?: SortType | `${SortType}.${SortDirection}`
 }
 
 const DEFAULT_PARAMS: HardcoverParams = {
   limit: 10,
-  status: "READING",
+  status: "reading",
+  sort: "progress.desc",
 }
 
 export default class HardcoverPlugin extends Plugin {
@@ -47,6 +51,22 @@ export default class HardcoverPlugin extends Plugin {
         } catch (error) {
           console.error("Invalid JSON in code block", error)
         }
+
+        if (!Object.isEmpty(userParams)) {
+          const parsedParams = validateParams(userParams)
+          if (!parsedParams) {
+            new Notice("Invalid params")
+            new ConfigError({
+              target: el,
+              props: {
+                error: new Error("Invalid params"),
+              },
+            })
+          } else {
+            userParams = parsedParams
+          }
+        }
+
         const params: HardcoverParams = {
           ...DEFAULT_PARAMS,
           ...userParams,
