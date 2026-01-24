@@ -2,7 +2,7 @@
   import type { createUpdateProgressStore } from "@stores/books"
   import BookCover from "@ui/BookCover.svelte"
   import Progress from "@ui/Progress.svelte"
-  import { BOOK_STATUS } from "@/constants"
+  import { BOOK_COVER_FALLBACK, BOOK_STATUS } from "@/constants"
   import type { UserBook } from "@/types"
 
   export let userBook: UserBook
@@ -11,7 +11,10 @@
   $: latestRead = userBook?.user_book_reads?.[0] || null
   $: totalPages =
     latestRead?.edition?.pages ?? userBook?.book?.pages ?? undefined
-  $: coverUrl = latestRead?.edition?.image?.url ?? userBook?.book?.image?.url
+  $: coverUrl =
+    latestRead?.edition?.image?.url ??
+    userBook?.book?.image?.url ??
+    BOOK_COVER_FALLBACK
   $: shouldShowProgress =
     latestRead?.edition?.id &&
     latestRead?.user_book?.status_id === BOOK_STATUS.reading

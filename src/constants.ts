@@ -10,6 +10,9 @@ export const BOOK_STATUS = {
   dnf: 5,
 }
 
+export const BOOK_COVER_FALLBACK =
+  "https://production-img.hardcover.app/enlarge?url=https://assets.hardcover.app/static/covers/cover5.webp&width=180&height=270&type=webp"
+
 export const DEFAULT_PARAMS = {
   limit: 5,
   status: "reading",
