@@ -1,4 +1,4 @@
-import { BOOK_STATUS } from "./constants"
+import { BOOK_STATUS } from "@/constants"
 
 export interface Book {
   id: number
@@ -18,7 +18,7 @@ export interface Edition {
 
 export type BookStatus = (typeof BOOK_STATUS)[keyof typeof BOOK_STATUS]
 
-export type BookStatusKey = keyof typeof BOOK_STATUS
+export type BookStatusParam = keyof typeof BOOK_STATUS
 
 export interface ReadingSession {
   id: number
@@ -59,3 +59,8 @@ export interface UpdateUserBookReadResponse {
     } | null
   } | null
 }
+
+export type SortType = "progress" | "added" | "updated"
+export type SortDirection = "asc" | "desc"
+
+export type SortParam = SortType | `${SortType}.${SortDirection}`
