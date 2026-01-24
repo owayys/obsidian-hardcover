@@ -1,6 +1,6 @@
 # Hardcover.app Tracker [![Obsidian](https://img.shields.io/badge/Obsidian-6d28d9)](https://obsidian.md) [![GitHub release](https://img.shields.io/github/release/owayys/obsidian-hardcover.svg?label=Version)](https://github.com/owayys/obsidian-hardcover/releases) ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/owayys/obsidian-hardcover/total?label=Downloads&color=27C840)
 
-A simple [Hardcover](https://hardcover.app/) reading tracker for [Obsidian](https://obsidian.md/) that brings your reading progress and book library directly into your notes.
+A simple [Hardcover](https://hardcover.app/) reading tracker for [Obsidian](https://obsidian.md/) that brings your reading progress directly into your notes.
 
 ![Hardcover Plugin Demo](media/demo.gif)
 
@@ -32,14 +32,6 @@ A simple [Hardcover](https://hardcover.app/) reading tracker for [Obsidian](http
 That's it! Your books will appear with interactive progress controls.
 
 ## Configuration
-
-### API Token Setup
-
-Access via **Settings > Community plugins > Hardcover**:
-
-1. Click "Set Token" 
-2. Enter your Hardcover API token
-3. Token is securely stored using Obsidian's secret storage with key "hardcover-token"
 
 ### Code Block Parameters
 
@@ -73,7 +65,7 @@ Customize your book display with these parameters:
 
 ### Sort Options
 
-Format: `"field.direction"` where direction is `.asc` or `.desc`
+Format: `"field.direction"` where direction is `.asc` or `.desc` (defaults to `.desc` if only the field is specified)
 
 **Fields:**
 - `"progress"` - Reading progress
