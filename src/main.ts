@@ -63,7 +63,6 @@ export default class HardcoverPlugin extends Plugin {
             },
           })
         } catch (error) {
-          new Notice("Failed to load book list component")
           new ConfigError({
             target: el,
             props: {
