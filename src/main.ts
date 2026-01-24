@@ -1,27 +1,17 @@
 import { HardcoverClient } from "@api/client"
 import BookList from "@ui/BookList.svelte"
-import { SortDirection, SortType } from "@utils/query"
+import { parseParams } from "@utils/schema"
 import { Notice, Plugin } from "obsidian"
-import {
-  DEFAULT_SETTINGS,
-  HardcoverSettingTab,
-  PluginSettings,
-} from "@/settings"
+import { DEFAULT_SETTINGS } from "@/constants"
+import { HardcoverSettingTab, PluginSettings } from "@/settings"
 import { initializeHardcoverClient } from "@/stores/factory"
-import { BookStatusKey } from "@/types"
+import { BookStatusParam, SortParam } from "@/types"
 import ConfigError from "@/ui/ConfigError.svelte"
-import { validateParams } from "./utils/schema"
 
 export interface HardcoverParams {
   limit: number
-  status: BookStatusKey
-  sort?: SortType | `${SortType}.${SortDirection}`
-}
-
-const DEFAULT_PARAMS: HardcoverParams = {
-  limit: 10,
-  status: "reading",
-  sort: "progress.desc",
+  status: BookStatusParam
+  sort?: SortParam
 }
 
 export default class HardcoverPlugin extends Plugin {
@@ -45,31 +35,14 @@ export default class HardcoverPlugin extends Plugin {
     this.registerMarkdownCodeBlockProcessor(
       "hardcover",
       async (src, el, _ctx) => {
-        let userParams: Partial<HardcoverParams> = {}
+        let userParams: HardcoverParams | Record<string, never> = {}
         try {
           userParams = JSON.parse(src)
         } catch (error) {
           console.error("Invalid JSON in code block", error)
         }
 
-        if (!Object.isEmpty(userParams)) {
-          const parsedParams = validateParams(userParams)
-          if (!parsedParams) {
-            new ConfigError({
-              target: el,
-              props: {
-                error: new Error("Invalid params"),
-              },
-            })
-          } else {
-            userParams = parsedParams
-          }
-        }
-
-        const params: HardcoverParams = {
-          ...DEFAULT_PARAMS,
-          ...userParams,
-        }
+        const params = parseParams(userParams)
 
         if (!this.hardcoverClient) {
           new Notice("Hardcover API token not configured")
@@ -90,7 +63,6 @@ export default class HardcoverPlugin extends Plugin {
             },
           })
         } catch (error) {
-          new Notice("Failed to load book list component")
           new ConfigError({
             target: el,
             props: {

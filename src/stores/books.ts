@@ -1,14 +1,10 @@
-import {
-  BuildUserBooksOrderParams,
-  SortDirection,
-  SortType,
-} from "@utils/query"
+import { BuildUserBooksOrderParams } from "@utils/query"
 import { createQueryStore, type QueryStore } from "@utils/store"
 import { writable } from "svelte/store"
 import { BOOK_STATUS } from "@/constants"
 import { HardcoverParams } from "@/main"
 import { getHardcoverClient } from "@/stores/factory"
-import type { UserBook } from "@/types"
+import type { SortDirection, SortType, UserBook } from "@/types"
 
 export function createUserBooksStore({
   limit,

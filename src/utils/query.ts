@@ -3,9 +3,7 @@ import {
   Order_By,
   User_Books_Order_By,
 } from "@api/generated/graphql"
-
-export type SortType = "progress" | "added" | "updated"
-export type SortDirection = "asc" | "desc"
+import { SortDirection, SortType } from "@/types"
 
 export interface BuildUserBooksOrderParams {
   sortType: SortType
