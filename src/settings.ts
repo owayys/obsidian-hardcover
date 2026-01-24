@@ -4,11 +4,6 @@ import HardcoverPlugin from "@/main"
 export type PluginSettings = {
   TOKEN_SECRET_KEY: string
 }
-
-export const DEFAULT_SETTINGS: PluginSettings = {
-  TOKEN_SECRET_KEY: "",
-}
-
 export class HardcoverSettingTab extends PluginSettingTab {
   plugin: HardcoverPlugin
 
