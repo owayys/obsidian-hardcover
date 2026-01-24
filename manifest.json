@@ -1,7 +1,7 @@
 {
   "id": "obsidian-hardcover",
-  "name": "Hardcover",
-  "version": "1.1.4",
+  "name": "Hardcover Tracker",
+  "version": "1.1.5",
   "minAppVersion": "0.15.0",
   "description": "A hardcover.app tracker for Obsidian.",
   "author": "owayys",
