@@ -2,7 +2,7 @@
 
 A simple [Hardcover](https://hardcover.app/) reading tracker for [Obsidian](https://obsidian.md/) that brings your reading progress and book library directly into your notes.
 
-![Hardcover Plugin Demo](screenshots/showcase.png)
+![Hardcover Plugin Demo](media/demo.gif)
 
 ## Features
 
