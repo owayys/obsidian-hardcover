@@ -1,15 +1,18 @@
+import { DEFAULT_PARAMS, DEFAULT_SORTING_FOR_STATUS } from "@/constants"
 import { HardcoverParams } from "@/main"
-import { BookStatusKey } from "@/types"
-import { SortDirection, SortType } from "./query"
+import { BookStatusParam, SortDirection, SortType } from "@/types"
 
-export function validateParams(obj: unknown): HardcoverParams | null {
-  if (typeof obj !== "object" || obj === null) return null
+export function parseParams(obj: unknown): HardcoverParams {
+  if (typeof obj !== "object" || obj === null) return DEFAULT_PARAMS
 
   const params = obj as Record<string, unknown>
+  const result: HardcoverParams = { ...DEFAULT_PARAMS }
 
-  if (typeof params.limit !== "number" || params.limit < 1) return null
+  if (typeof params.limit === "number" && params.limit >= 1) {
+    result.limit = params.limit
+  }
 
-  const validStatuses: BookStatusKey[] = [
+  const validStatuses: BookStatusParam[] = [
     "dnf",
     "paused",
     "read",
@@ -17,34 +20,34 @@ export function validateParams(obj: unknown): HardcoverParams | null {
     "tbr",
   ]
   if (
-    typeof params.status !== "string" ||
-    !validStatuses.includes(params.status as BookStatusKey)
+    typeof params.status === "string" &&
+    validStatuses.includes(params.status as BookStatusParam)
   ) {
-    return null
-  }
+    result.status = params.status as BookStatusParam
 
-  if (params.sort !== undefined) {
-    if (typeof params.sort !== "string") return null
-
-    const validSortTypes: SortType[] = ["progress", "added", "updated"]
-    const validDirections: SortDirection[] = ["asc", "desc"]
-
-    if (params.sort.includes(".")) {
-      const [sortType, direction] = params.sort.split(".")
-      if (
-        !validSortTypes.includes(sortType as SortType) ||
-        !validDirections.includes(direction as SortDirection)
-      ) {
-        return null
-      }
-    } else if (!validSortTypes.includes(params.sort as SortType)) {
-      return null
+    if (params.sort === undefined) {
+      result.sort = DEFAULT_SORTING_FOR_STATUS[result.status]
     }
   }
 
-  return {
-    limit: params.limit,
-    status: params.status as BookStatusKey,
-    sort: params.sort as HardcoverParams["sort"],
+  if (params.sort !== undefined) {
+    if (typeof params.sort === "string") {
+      const validSortTypes: SortType[] = ["progress", "added", "updated"]
+      const validDirections: SortDirection[] = ["asc", "desc"]
+
+      if (params.sort.includes(".")) {
+        const [sortType, direction] = params.sort.split(".")
+        if (
+          validSortTypes.includes(sortType as SortType) &&
+          validDirections.includes(direction as SortDirection)
+        ) {
+          result.sort = params.sort as HardcoverParams["sort"]
+        }
+      } else if (validSortTypes.includes(params.sort as SortType)) {
+        result.sort = params.sort as HardcoverParams["sort"]
+      }
+    }
   }
+
+  return result
 }
